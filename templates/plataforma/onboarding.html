@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Onboarding - GUIA</title>
+    
+    <!-- Arquivos Estáticos servidos pelo Flask -->
+    <link rel="stylesheet" href="/static/styles/main.css">
+    <link rel="stylesheet" href="/static/styles/dashboard.css">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" type="image/x-icon" href="/static/assets/favicon.ico">
+    
+    <style>
+        /* Estilos específicos do Onboarding */
+        .onboarding-container {
+            padding: 120px 20px 60px;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        
+        .onboarding-header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+        
+        .onboarding-header h1 {
+            font-size: 2.8rem;
+            margin-bottom: 15px;
+            background: linear-gradient(135deg, #FF3B30, #FF9500);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .onboarding-progress {
+            background: #FFF;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+            margin-bottom: 40px;
+            border: 1px solid #F2F2F7;
+        }
+        
+        .progress-bar {
+            height: 10px;
+            background: #F2F2F7;
+            border-radius: 5px;
+            margin-bottom: 15px;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #FF3B30, #FF9500);
+            border-radius: 5px;
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+        
+        .progress-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .progress-text {
+            font-weight: 600;
+            color: #1C1C1E;
+        }
+        
+        .progress-percentage {
+            font-weight: 700;
+            color: #FF3B30;
+            font-size: 1.2rem;
+        }
+        
+        .onboarding-steps {
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+        
+        .step-card {
+            background: #FFF;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.03);
+            border-left: 5px solid #E5E5EA;
+            transition: all 0.3s ease;
+        }
+        
+        .step-card.completed {
+            border-left-color: #34C759;
+            opacity: 0.85;
+        }
+        
+        .step-card.current {
+            border-left-color: #FF9500;
+            box-shadow: 0 4px 20px rgba(255, 149, 0, 0.15);
+        }
+        
+        .step-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .step-title {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .step-number {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: #E5E5EA;
+            color: #8E8E93;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+        }
+        
+        .step-card.completed .step-number {
+            background: #34C759;
+            color: #FFF;
+        }
+        
+        .step-card.current .step-number {
+            background: #FF9500;
+            color: #FFF;
+        }
+        
+        .step-content h3 {
+            font-size: 1.3rem;
+            margin-bottom: 8px;
+            color: #1C1C1E;
+        }
+        
+        .step-content p {
+            color: #666;
+            margin-bottom: 20px;
+            font-size: 0.95rem;
+        }
+        
+        .step-tasks {
+            background: #F8F9FA;
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+        
+        .task-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .task-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 0;
+            border-bottom: 1px solid #E5E5EA;
+        }
+        
+        .task-item:last-child {
+            border-bottom: none;
+        }
+        
+        .task-checkbox {
+            width: 24px;
+            height: 24px;
+            border: 2px solid #C7C7CC;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            background: #FFF;
+        }
+        
+        .task-checkbox.checked {
+            background: #34C759;
+            border-color: #34C759;
+            color: #FFF;
+        }
+        
+        .task-checkbox i {
+            font-size: 12px;
+            opacity: 0;
+        }
+        
+        .task-checkbox.checked i {
+            opacity: 1;
+        }
+        
+        .task-text {
+            flex: 1;
+            color: #3A3A3C;
+            font-weight: 500;
+        }
+        
+        .task-status {
+            font-size: 0.8rem;
+            font-weight: 600;
+            padding: 4px 10px;
+            border-radius: 20px;
+            background: #E5E5EA;
+            color: #8E8E93;
+        }
+        
+        .task-status.completed {
+            background: rgba(52, 199, 89, 0.15);
+            color: #28A745;
+        }
+        
+        .task-status.pending {
+            background: rgba(255, 149, 0, 0.15);
+            color: #D97706;
+        }
+        
+        .resources-section {
+            background: #FFF;
+            border-radius: 12px;
+            padding: 30px;
+            margin-top: 40px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+        }
+        
+        .resources-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 25px;
+        }
+        
+        .resource-card {
+            background: #F8F9FA;
+            border-radius: 10px;
+            padding: 20px;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+            text-align: center;
+        }
+        
+        .resource-card:hover {
+            border-color: #FF3B30;
+            transform: translateY(-5px);
+            background: #FFF;
+            box-shadow: 0 8px 20px rgba(255, 59, 48, 0.1);
+        }
+        
+        .resource-icon {
+            font-size: 2rem;
+            color: #FF3B30;
+            margin-bottom: 15px;
+        }
+        
+        .resource-card h3 {
+            font-size: 1.1rem;
+            margin-bottom: 10px;
+        }
+        
+        .resource-card p {
+            font-size: 0.9rem;
+            color: #8E8E93;
+            margin-bottom: 15px;
+        }
+        
+        @media (max-width: 768px) {
+            .onboarding-container {
+                padding: 100px 15px 40px;
+            }
+            .onboarding-header h1 {
+                font-size: 2.2rem;
+            }
+            .step-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header (Igual ao da página inicial) -->
+    <header class="main-header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <a href="/" style="text-decoration: none; color: inherit; display: flex; align-items: center; gap: 10px;">
+                        <i class="fas fa-rocket rocket-icon"></i>
+                        <span class="logo-text">GUIA</span>
+                    </a>
+                </div>
+                <nav class="main-nav">
+                    <ul>
+                        <li><a href="/">Página Inicial</a></li>
+                        <li><a href="/dashboard">Painel Gestão (Kanban)</a></li>
+                        <li><a href="/onboarding" class="nav-button">Meu Onboarding</a></li>
+                    </ul>
+                </nav>
+                <button class="mobile-menu-btn">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Onboarding Content -->
+    <div class="onboarding-container">
+        <div class="onboarding-header">
+            <span style="display: inline-block; padding: 6px 15px; background: rgba(0, 122, 255, 0.1); color: #007AFF; border-radius: 20px; font-weight: 600; font-size: 0.85rem; margin-bottom: 15px;">VISÃO DO COLABORADOR</span>
+            <h1>🎉 Bem-vindo(a) à equipe!</h1>
+            <p>Sua jornada começa aqui. Este é o seu checklist pessoal. Conclua as etapas para garantir que seu computador, seus acessos e sua documentação estejam 100% prontos.</p>
+        </div>
+        
+        <!-- Progress Bar -->
+        <div class="onboarding-progress">
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+            <div class="progress-info">
+                <div class="progress-text">
+                    Etapa <span id="currentStepDisplay">1</span> de <span id="totalStepsDisplay">4</span>
+                </div>
+                <div class="progress-percentage" id="progressPercentage">0%</div>
+            </div>
+        </div>
+        
+        <!-- Onboarding Steps -->
+        <div class="onboarding-steps" id="stepsContainer">
+            
+            <!-- Step 1: RH -->
+            <div class="step-card current">
+                <div class="step-header">
+                    <div class="step-title">
+                        <div class="step-number">1</div>
+                        <div>
+                            <h2>Recursos Humanos</h2>
+                            <p>Documentação e formalização de entrada</p>
+                        </div>
+                    </div>
+                    <div class="step-status">
+                        <span class="task-status pending">EM ANDAMENTO</span>
+                    </div>
+                </div>
+                <div class="step-content">
+                    <h3>Valide sua documentação</h3>
+                    <p>O RH precisa que esses itens estejam concluídos para efetivar seu cadastro no sistema.</p>
+                    
+                    <div class="step-tasks">
+                        <ul class="task-list">
+                            <li class="task-item">
+                                <div class="task-checkbox checked" onclick="toggleTask(this)">
+                                    <i class="fas fa-check"></i>
+                                </div>
+                                <div class="task-text">Enviar documentos pessoais (RG, CPF, Carteira de Trabalho)</div>
+                                <span class="task-status completed">Concluído</span>
+                            </li>
+                            <li class="task-item">
+                                <div class="task-checkbox" onclick="toggleTask(this)">
+                                    <i class="fas fa-check"></i>
+                                </div>
+                                <div class="task-text">Assinar o Contrato de Trabalho Digital</div>
+                                <span class="task-status pending">Pendente</span>
+                            </li>
+                            <li class="task-item">
+                                <div class="task-checkbox" onclick="toggleTask(this)">
+                                    <i class="fas fa-check"></i>
+                                </div>
+                                <div class="task-text">Realizar Exame Admissional (SESMT)</div>
+                                <span class="task-status pending">Pendente</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Step 2: TI -->
+            <div class="step-card">
+                <div class="step-header">
+                    <div class="step-title">
+                        <div class="step-number">2</div>
+                        <div>
+                            <h2>Tecnologia (TI)</h2>
+                            <p>Acessos, sistemas e equipamentos</p>
+                        </div>
+                    </div>
+                    <div class="step-status">
+                        <span class="task-status pending">PRÓXIMA</span>
+                    </div>
+                </div>
+                <div class="step-content">
+                    <h3>Configure seu ambiente virtual</h3>
+                    <p>Faça o primeiro acesso nas ferramentas que você usará no dia a dia.</p>
+                    
+                    <div class="step-tasks">
+                        <ul class="task-list">
+                            <li class="task-item">
+                                <div class="task-checkbox" onclick="toggleTask(this)">
+                                    <i class="fas fa-check"></i>
+                                </div>
+                                <div class="task-text">Fazer login no E-mail Corporativo</div>
+                                <span class="task-status pending">Pendente</span>
+                            </li>
+                            <li class="task-item">
+                                <div class="task-checkbox" onclick="toggleTask(this)">
+                                    <i class="fas fa-check"></i>
+                                </div>
+                                <div class="task-text">Trocar a senha provisória do portal</div>
+                                <span class="task-status pending">Pendente</span>
+                            </li>
+                            <li class="task-item">
+                                <div class="task-checkbox" onclick="toggleTask(this)">
+                                    <i class="fas fa-check"></i>
+                                </div>
+                                <div class="task-text">Acessar o sistema de ponto (Kairós)</div>
+                                <span class="task-status pending">Pendente</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Step 3: Cultura -->
+            <div class="step-card">
+                <div class="step-header">
+                    <div class="step-title">
+                        <div class="step-number">3</div>
+                        <div>
+                            <h2>Cultura e Integração</h2>
+                            <p>Conhecendo a empresa por dentro</p>
+                        </div>
+                    </div>
+                    <div class="step-status">
+                        <span class="task-status pending">BLOQUEADA</span>
+                    </div>
+                </div>
+                <div class="step-content">
+                    <h3>Nossos valores e missão</h3>
+                    <p>Entenda como funcionamos, qual é o nosso propósito e conheça a estrutura da empresa.</p>
+                    
+                    <div class="step-tasks">
+                        <ul class="task-list">
+                            <li class="task-item">
+                                <div class="task-checkbox" onclick="toggleTask(this)">
+                                    <i class="fas fa-check"></i>
+                                </div>
+                                <div class="task-text">Assistir ao vídeo institucional de Boas-Vindas</div>
+                                <span class="task-status pending">Pendente</span>
+                            </li>
+                            <li class="task-item">
+                                <div class="task-checkbox" onclick="toggleTask(this)">
+                                    <i class="fas fa-check"></i>
+                                </div>
+                                <div class="task-text">Ler o Manual do Colaborador e Código de Conduta</div>
+                                <span class="task-status pending">Pendente</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Step 4: Gestão -->
+            <div class="step-card">
+                <div class="step-header">
+                    <div class="step-title">
+                        <div class="step-number">4</div>
+                        <div>
+                            <h2>Alinhamento com a Liderança</h2>
+                            <p>Primeiros passos na sua área</p>
+                        </div>
+                    </div>
+                    <div class="step-status">
+                        <span class="task-status pending">BLOQUEADA</span>
+                    </div>
+                </div>
+                <div class="step-content">
+                    <h3>Conheça seu time</h3>
+                    <p>É hora de sentar com seu gestor para entender suas primeiras metas e rotinas.</p>
+                    
+                    <div class="step-tasks">
+                        <ul class="task-list">
+                            <li class="task-item">
+                                <div class="task-checkbox" onclick="toggleTask(this)">
+                                    <i class="fas fa-check"></i>
+                                </div>
+                                <div class="task-text">Participar da reunião inicial (1:1) com o gestor direto</div>
+                                <span class="task-status pending">Pendente</span>
+                            </li>
+                            <li class="task-item">
+                                <div class="task-checkbox" onclick="toggleTask(this)">
+                                    <i class="fas fa-check"></i>
+                                </div>
+                                <div class="task-text">Ser apresentado aos colegas de setor</div>
+                                <span class="task-status pending">Pendente</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Resources Section -->
+        <div class="resources-section">
+            <h2 style="margin-bottom: 5px;">📚 Materiais de Apoio</h2>
+            <p style="color: #666; margin-bottom: 20px;">Links úteis disponibilizados pela empresa para te ajudar na integração.</p>
+            
+            <div class="resources-grid">
+                <div class="resource-card">
+                    <div class="resource-icon"><i class="fas fa-book-open"></i></div>
+                    <h3>Manual do Colaborador</h3>
+                    <p>Políticas, horários e benefícios.</p>
+                    <a href="#" style="color: #FF3B30; font-weight: 600; text-decoration: none;">Acessar PDF <i class="fas fa-external-link-alt" style="font-size: 0.8rem;"></i></a>
+                </div>
+                
+                <div class="resource-card">
+                    <div class="resource-icon"><i class="fas fa-shield-alt"></i></div>
+                    <h3>Segurança no Trabalho</h3>
+                    <p>Cartilha oficial do SESMT.</p>
+                    <a href="#" style="color: #FF3B30; font-weight: 600; text-decoration: none;">Ler Regras <i class="fas fa-external-link-alt" style="font-size: 0.8rem;"></i></a>
+                </div>
+                
+                <div class="resource-card">
+                    <div class="resource-icon"><i class="fas fa-sitemap"></i></div>
+                    <h3>Organograma</h3>
+                    <p>Estrutura de todos os setores.</p>
+                    <a href="#" style="color: #FF3B30; font-weight: 600; text-decoration: none;">Ver Mapa <i class="fas fa-external-link-alt" style="font-size: 0.8rem;"></i></a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer (Igual ao da página inicial) -->
+    <footer class="main-footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <div class="logo">
+                        <i class="fas fa-rocket rocket-icon"></i>
+                        <span class="logo-text" style="color: white;">GUIA</span>
+                    </div>
+                    <p class="footer-tagline">Gestão Unificada de Integração e Acolhimento.</p>
+                    <p style="color: var(--gray-light); font-size: 0.85rem; margin-top: 10px;">
+                        Uma solução desenvolvida pela turma de Aprendizagem Comercial SENAC-CE Crato (2025-09-75). Fica reservado à turma o direito exclusivo do conceito. Código aberto sob Licença MIT.
+                    </p>
+                </div>
+                <div class="footer-links">
+                    <div class="link-group">
+                        <h4>Acessos Rápidos</h4>
+                        <a href="/">Página Inicial</a>
+                        <a href="/dashboard">Dashboard (Kanban)</a>
+                        <a href="/onboarding">Onboarding (Colaborador)</a>
+                    </div>
+                    <div class="link-group">
+                        <h4>Projeto</h4>
+                        <a href="/#features">A Solução</a>
+                        <a href="/#how-it-works">Metodologia</a>
+                        <a href="/#about">Turma SENAC</a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 Sebastião Soares, Suyane Oliveira, Renan Lenno e Turma SENAC-CE.</p>
+                <div class="footer-bottom-links">
+                    <span>Crato, CE - Brasil</span>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Lógica de Progresso Dinâmica
+        function updateProgress() {
+            // Conta todos os checkboxes da tela
+            const allCheckboxes = document.querySelectorAll('.task-checkbox');
+            const completedCheckboxes = document.querySelectorAll('.task-checkbox.checked');
+            
+            const totalTasks = allCheckboxes.length;
+            const completedTasks = completedCheckboxes.length;
+            
+            // Calcula a porcentagem global
+            const percentage = totalTasks === 0 ? 0 : Math.round((completedTasks / totalTasks) * 100);
+            
+            // Atualiza UI da barra
+            document.getElementById('progressFill').style.width = `${percentage}%`;
+            document.getElementById('progressPercentage').textContent = `${percentage}%`;
+            
+            // Atualiza status dos Cards (Passos)
+            const steps = document.querySelectorAll('.step-card');
+            let currentStepFound = false;
+            let currentStepIndex = 1;
+
+            steps.forEach((step, index) => {
+                const stepCheckboxes = step.querySelectorAll('.task-checkbox');
+                const stepCompleted = step.querySelectorAll('.task-checkbox.checked');
+                const statusBadge = step.querySelector('.step-status');
+                
+                // Se o passo tem tarefas e todas estão concluidas
+                if (stepCheckboxes.length > 0 && stepCheckboxes.length === stepCompleted.length) {
+                    step.classList.remove('current');
+                    step.classList.add('completed');
+                    statusBadge.innerHTML = '<span class="task-status completed">CONCLUÍDO</span>';
+                } 
+                // Se é o primeiro passo não concluído, ele vira o "Atual" (Current)
+                else if (!currentStepFound) {
+                    step.classList.add('current');
+                    step.classList.remove('completed');
+                    statusBadge.innerHTML = '<span class="task-status pending">EM ANDAMENTO</span>';
+                    currentStepFound = true;
+                    currentStepIndex = index + 1;
+                } 
+                // Os passos depois do atual ficam "Bloqueados/Próximos"
+                else {
+                    step.classList.remove('current', 'completed');
+                    statusBadge.innerHTML = '<span class="task-status pending" style="background:#F2F2F7; color:#8E8E93;">BLOQUEADA</span>';
+                }
+            });
+            
+            // Se tudo estiver concluído, mostra que está no último passo
+            if (!currentStepFound) currentStepIndex = steps.length;
+            
+            document.getElementById('currentStepDisplay').textContent = currentStepIndex;
+            document.getElementById('totalStepsDisplay').textContent = steps.length;
+        }
+
+        // Função de clique no checkbox
+        function toggleTask(checkbox) {
+            checkbox.classList.toggle('checked');
+            
+            const statusSpan = checkbox.closest('.task-item').querySelector('.task-status');
+            
+            if (checkbox.classList.contains('checked')) {
+                statusSpan.textContent = 'Concluído';
+                statusSpan.className = 'task-status completed';
+            } else {
+                statusSpan.textContent = 'Pendente';
+                statusSpan.className = 'task-status pending';
+            }
+            
+            // Recalcula as porcentagens e altera as cores do painel inteiro
+            updateProgress();
+        }
+
+        // Inicializa o cálculo assim que a página carrega
+        document.addEventListener('DOMContentLoaded', updateProgress);
+        
+        // Controle simples do Menu Mobile
+        const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
+        const mainNav = document.querySelector('.main-nav ul');
+        if (mobileMenuBtn && mainNav) {
+            mobileMenuBtn.addEventListener('click', () => {
+                mainNav.style.display = mainNav.style.display === 'flex' ? 'none' : 'flex';
+            });
+        }
+    </script>
+</body>
+</html>

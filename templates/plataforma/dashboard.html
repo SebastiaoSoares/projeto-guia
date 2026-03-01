@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Gestão - GUIA</title>
+    
+    <!-- Arquivos Estáticos servidos pelo Flask -->
+    <link rel="stylesheet" href="/static/styles/main.css">
+    <link rel="stylesheet" href="/static/styles/dashboard.css">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css">
+    <link rel="icon" type="image/x-icon" href="/static/assets/favicon.ico">
+</head>
+<body class="dashboard-body">
+    <!-- Dashboard Header -->
+    <header class="dashboard-header">
+        <div class="container">
+            <div class="dashboard-header-content">
+                <div class="dashboard-logo">
+                    <a href="/" style="text-decoration: none; display: flex; align-items: center; gap: 10px; color: inherit;">
+                        <i class="fas fa-rocket rocket-icon"></i>
+                        <span class="logo-text">GUIA</span>
+                    </a>
+                </div>
+                
+                <div class="dashboard-search">
+                    <i class="fas fa-search"></i>
+                    <input type="text" placeholder="Buscar colaborador ou pendência..." id="searchInput">
+                </div>
+                
+                <div class="dashboard-user">
+                    <div class="notifications" id="notificationsBtn">
+                        <i class="fas fa-bell"></i>
+                        <span class="notification-badge">2</span>
+                    </div>
+                    <div class="user-info" id="userMenu">
+                        <div class="user-avatar" style="background: var(--primary-red); color: white;">RH</div>
+                        <div class="user-details">
+                            <span class="user-name">Setor Pessoal</span>
+                            <span class="user-role">Administrador</span>
+                        </div>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Dashboard Content -->
+    <div class="dashboard-container">
+        <div class="dashboard-content">
+            <!-- Sidebar -->
+            <aside class="dashboard-sidebar">
+                <div class="sidebar-section">
+                    <h3>Visão Gestão</h3>
+                    <ul class="sidebar-menu">
+                        <li><a href="/dashboard" class="active">
+                            <i class="fas fa-columns"></i> Fluxo de Admissões
+                        </a></li>
+                        <li><a href="/onboarding">
+                            <i class="fas fa-user-plus"></i> Ver Visão Colaborador
+                        </a></li>
+                    </ul>
+                </div>
+                
+                <div class="sidebar-section">
+                    <h3>Setores Envolvidos</h3>
+                    <ul class="department-list">
+                        <li>
+                            <a href="#" class="department-filter active" data-department="todos">
+                                Todos os Setores <span class="department-count">14</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" class="department-filter" data-department="rh">
+                                Recursos Humanos <span class="department-count">5</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" class="department-filter" data-department="ti">
+                                Tecnologia (TI) <span class="department-count">4</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" class="department-filter" data-department="sesmt">
+                                Saúde (SESMT) <span class="department-count">3</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" class="department-filter" data-department="gestao">
+                                Gestores de Área <span class="department-count">2</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="sidebar-section">
+                    <h3>Urgência</h3>
+                    <div class="quick-filters">
+                        <button class="filter-btn active" data-filter="all">Todas</button>
+                        <button class="filter-btn" data-filter="priority" data-value="high">
+                            <i class="fas fa-exclamation-circle" style="color: #FF3B30;"></i> Atrasadas
+                        </button>
+                        <button class="filter-btn" data-filter="priority" data-value="medium">
+                            <i class="far fa-clock" style="color: #FF9500;"></i> No Prazo
+                        </button>
+                    </div>
+                </div>
+            </aside>
+
+            <!-- Main Content -->
+            <main class="dashboard-main">
+                <!-- Quick Stats -->
+                <div class="quick-stats">
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background-color: rgba(0, 122, 255, 0.1);">
+                            <i class="fas fa-users" style="color: #007AFF;"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3 class="stat-number">14</h3>
+                            <p>Em Processo</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background-color: rgba(255, 59, 48, 0.1);">
+                            <i class="fas fa-exclamation-triangle" style="color: #FF3B30;"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3 class="stat-number">2</h3>
+                            <p>Pendências TI</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background-color: rgba(255, 149, 0, 0.1);">
+                            <i class="fas fa-file-medical" style="color: #FF9500;"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3 class="stat-number">3</h3>
+                            <p>Aguardando SESMT</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background-color: rgba(52, 199, 89, 0.1);">
+                            <i class="fas fa-check-circle" style="color: #34C759;"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3 class="stat-number">98%</h3>
+                            <p>Integração Concluída</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Kanban Board -->
+                <div class="kanban-board-container">
+                    <div class="kanban-header">
+                        <div>
+                            <h2>
+                                <i class="fas fa-stream"></i> Quadro de Onboarding
+                                <span class="department-indicator" id="currentDepartment">Visão Global</span>
+                            </h2>
+                            <p>Mova o card do colaborador conforme ele avança nas etapas de integração</p>
+                        </div>
+                        <div class="kanban-actions">
+                            <button class="btn-action btn-secondary-action" style="border: 1px dashed #C7C7CC; color: #8E8E93;" title="Apenas Setor Pessoal pode criar colunas">
+                                <i class="fas fa-lock" style="font-size: 0.8rem;"></i> Nova Etapa
+                            </button>
+                            <button class="btn-action btn-primary-action btn-new-task">
+                                <i class="fas fa-user-plus"></i> Novo Colaborador
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Kanban Columns (Stages) -->
+                    <div class="kanban-columns">
+                        
+                        <!-- Etapa 1: RH -->
+                        <div class="kanban-column column-todo">
+                            <div class="column-header" style="border-color: #FF3B30;">
+                                <h3>1. Formalização (RH)</h3>
+                                <span class="column-count">2</span>
+                            </div>
+                            <div class="tasks-container" id="rh-column">
+                                <div class="task-card high-priority" data-id="1" draggable="true">
+                                    <div class="task-header">
+                                        <div class="task-tags">
+                                            <span class="task-tag" style="background: rgba(255, 59, 48, 0.1); color: #FF3B30;">URGENTE</span>
+                                            <span class="task-tag" style="background: #E5E5EA; color: #333;">RH</span>
+                                        </div>
+                                        <div class="task-actions">
+                                            <button class="task-action-btn edit-task" title="Editar"><i class="fas fa-edit"></i></button>
+                                        </div>
+                                    </div>
+                                    <h4 class="task-title">Maria Silva (Analista)</h4>
+                                    <p class="task-description">Aguardando envio dos documentos e assinatura do contrato.</p>
+                                    <div class="task-footer">
+                                        <div class="task-assignee">
+                                            <div class="assignee-avatar">SP</div>
+                                            <span class="assignee-name">Setor Pessoal</span>
+                                        </div>
+                                        <div class="task-deadline"><i class="far fa-calendar"></i><span class="deadline-overdue">Hoje</span></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Etapa 2: TI -->
+                        <div class="kanban-column column-progress">
+                            <div class="column-header" style="border-color: #007AFF;">
+                                <h3>2. Infraestrutura (TI)</h3>
+                                <span class="column-count">1</span>
+                            </div>
+                            <div class="tasks-container" id="ti-column">
+                                <div class="task-card medium-priority" data-id="2" draggable="true">
+                                    <div class="task-header">
+                                        <div class="task-tags">
+                                            <span class="task-tag" style="background: rgba(0, 122, 255, 0.1); color: #007AFF;">TI</span>
+                                        </div>
+                                        <div class="task-actions">
+                                            <button class="task-action-btn edit-task" title="Editar"><i class="fas fa-edit"></i></button>
+                                        </div>
+                                    </div>
+                                    <h4 class="task-title">João Souza (Dev)</h4>
+                                    <p class="task-description">Criar e-mail corporativo e liberar acessos ao Github/Kairós.</p>
+                                    <div class="task-footer">
+                                        <div class="task-assignee">
+                                            <div class="assignee-avatar">TI</div>
+                                            <span class="assignee-name">Suporte IT</span>
+                                        </div>
+                                        <div class="task-deadline"><i class="far fa-calendar"></i><span>15/10</span></div>
+                                    </div>
+                                    <div class="task-checklist">
+                                        <div class="checklist-summary">
+                                            <div class="checklist-progress">
+                                                <div class="checklist-fill" style="width: 50%; background: #007AFF;"></div>
+                                            </div>
+                                            <span>1/2 pendências</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Etapa 3: SESMT -->
+                        <div class="kanban-column column-review">
+                            <div class="column-header" style="border-color: #FF9500;">
+                                <h3>3. Liberação (SESMT)</h3>
+                                <span class="column-count">1</span>
+                            </div>
+                            <div class="tasks-container" id="sesmt-column">
+                                <div class="task-card low-priority" data-id="3" draggable="true">
+                                    <div class="task-header">
+                                        <div class="task-tags">
+                                            <span class="task-tag" style="background: rgba(255, 149, 0, 0.1); color: #FF9500;">SESMT</span>
+                                        </div>
+                                        <div class="task-actions">
+                                            <button class="task-action-btn edit-task" title="Editar"><i class="fas fa-edit"></i></button>
+                                        </div>
+                                    </div>
+                                    <h4 class="task-title">Ana Costa (Vendas)</h4>
+                                    <p class="task-description">Aguardando resultado do exame admissional de rotina.</p>
+                                    <div class="task-footer">
+                                        <div class="task-assignee">
+                                            <div class="assignee-avatar">MD</div>
+                                            <span class="assignee-name">Médico Trab.</span>
+                                        </div>
+                                        <div class="task-deadline"><i class="far fa-calendar"></i><span>Amanhã</span></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Etapa 4: Concluído -->
+                        <div class="kanban-column column-done">
+                            <div class="column-header" style="border-color: #34C759;">
+                                <h3>4. Acolhimento (Gestão)</h3>
+                                <span class="column-count">1</span>
+                            </div>
+                            <div class="tasks-container" id="done-column">
+                                <div class="task-card" data-id="4" draggable="true" style="opacity: 0.8;">
+                                    <div class="task-header">
+                                        <div class="task-tags">
+                                            <span class="task-tag" style="background: rgba(52, 199, 89, 0.1); color: #34C759;">CONCLUÍDO</span>
+                                            <span class="task-tag" style="background: #E5E5EA; color: #333;">GESTÃO</span>
+                                        </div>
+                                        <div class="task-actions">
+                                            <button class="task-action-btn delete-task" title="Arquivar"><i class="fas fa-archive"></i></button>
+                                        </div>
+                                    </div>
+                                    <h4 class="task-title">Carlos Ferreira (Marketing)</h4>
+                                    <p class="task-description">Colaborador liberado. Iniciar 1:1 de boas-vindas com liderança.</p>
+                                    <div class="task-footer">
+                                        <div class="task-assignee">
+                                            <div class="assignee-avatar" style="background: #34C759; color: white;"><i class="fas fa-check"></i></div>
+                                            <span class="assignee-name">Integrado</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Task Modal (Adicionar Colaborador) -->
+    <div class="task-modal-overlay" id="taskModal">
+        <div class="task-modal">
+            <div class="modal-header">
+                <h3>Novo Colaborador no Fluxo</h3>
+                <button class="close-modal" id="closeModal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <form id="taskForm">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="taskTitle">Nome do Colaborador e Cargo *</label>
+                        <input type="text" id="taskTitle" name="title" class="form-control" placeholder="Ex: Roberto Alves (Desenvolvedor)" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="taskDescription">Pendência Inicial / Observações *</label>
+                        <textarea id="taskDescription" name="description" class="form-control" placeholder="Descreva o que o RH ou a TI precisa fazer primeiro..." rows="3" required></textarea>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="taskPriority">Status de Prazo</label>
+                            <select id="taskPriority" name="priority" class="form-control">
+                                <option value="high">Urgente (Início imediato)</option>
+                                <option value="medium" selected>No Prazo (Normal)</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="taskDepartment">Etapa Inicial</label>
+                            <select id="taskDepartment" name="department" class="form-control">
+                                <option value="rh" selected>1. Formalização (RH)</option>
+                                <option value="ti">2. Infraestrutura (TI)</option>
+                                <option value="sesmt">3. Liberação (SESMT)</option>
+                                <option value="gestao">4. Acolhimento (Gestão)</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="taskDeadline">Data Prevista de Início</label>
+                            <input type="date" id="taskDeadline" name="deadline" class="form-control">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn-action btn-secondary-action" id="cancelBtn">Cancelar</button>
+                    <button type="submit" class="btn-action btn-primary-action" id="saveTaskBtn">
+                        <i class="fas fa-save"></i> Adicionar ao Fluxo
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Importando JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+    <script src="/static/scripts/main.js"></script>
+    
+    <!-- INTEGRAÇÃO API (Comentei para não quebrar caso o backend não esteja rodando ainda) -->
+    <!-- <script src="/static/scripts/api_service.js"></script> -->
+    
+    <script src="/static/scripts/kanban.js"></script>
+    
+    <!-- Inicialização -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            if (typeof AOS !== 'undefined') {
+                AOS.init({ duration: 800, once: true });
+            }
+            
+            // Verifica se KanbanBoard existe, se não, usa o Fallback
+            if (typeof KanbanBoard !== 'undefined') {
+                window.kanbanBoard = new KanbanBoard();
+            } else {
+                setupBasicKanban();
+            }
+            
+            // Filtros Laterais
+            document.querySelectorAll('.department-filter').forEach(filter => {
+                filter.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    document.querySelectorAll('.department-filter').forEach(f => f.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    const deptName = this.textContent.split('<')[0].trim();
+                    document.getElementById('currentDepartment').textContent = deptName;
+                    
+                    const department = this.dataset.department;
+                    filterTasksByDepartment(department);
+                });
+            });
+            
+            // Modais
+            document.querySelector('.btn-new-task')?.addEventListener('click', () => toggleModal(true));
+            document.getElementById('closeModal')?.addEventListener('click', () => toggleModal(false));
+            document.getElementById('cancelBtn')?.addEventListener('click', () => toggleModal(false));
+            
+            // Tratamento do formulário
+            const form = document.getElementById('taskForm');
+            if(form) {
+                form.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    if (typeof KanbanBoard !== 'undefined' && window.kanbanBoard && window.kanbanBoard.validateTaskForm) {
+                        window.kanbanBoard.createNewTask(this);
+                        toggleModal(false);
+                    } else {
+                        createTaskFallback(this);
+                    }
+                });
+            }
+
+            function toggleModal(show) {
+                const modal = document.getElementById('taskModal');
+                if (!modal) return;
+                modal.style.display = show ? 'flex' : 'none';
+                document.body.style.overflow = show ? 'hidden' : '';
+                if(show && form) form.reset();
+            }
+
+            // Busca Simples
+            const searchInput = document.getElementById('searchInput');
+            if (searchInput) {
+                searchInput.addEventListener('input', function() {
+                    const term = this.value.toLowerCase();
+                    document.querySelectorAll('.task-card').forEach(task => {
+                        const text = task.textContent.toLowerCase();
+                        task.style.display = text.includes(term) ? 'block' : 'none';
+                    });
+                });
+            }
+        });
+        
+        // Fallback básico para arrastar e soltar (caso o JS principal falhe)
+        function setupBasicKanban() {
+            const tasks = document.querySelectorAll('.task-card');
+            const columns = document.querySelectorAll('.kanban-column .tasks-container');
+            
+            tasks.forEach(task => {
+                // Removemos os eventos antigos recriando o nó para evitar duplicação de eventos ao criar novos
+                const newTask = task.cloneNode(true);
+                task.parentNode.replaceChild(newTask, task);
+                
+                newTask.addEventListener('dragstart', function(e) {
+                    this.classList.add('dragging');
+                    e.dataTransfer.setData('text/plain', this.dataset.id);
+                });
+                newTask.addEventListener('dragend', function() {
+                    this.classList.remove('dragging');
+                    updateColumnCounts();
+                });
+                
+                // Botões de ação do Card
+                newTask.querySelector('.delete-task')?.addEventListener('click', function() {
+                    if(confirm('Tem certeza que deseja remover este colaborador do fluxo?')) {
+                        newTask.remove();
+                        updateColumnCounts();
+                        showBasicNotification('Processo arquivado!', 'success');
+                    }
+                });
+                newTask.querySelector('.edit-task')?.addEventListener('click', function() {
+                    alert('Função de edição em desenvolvimento. Abra o perfil do colaborador para editar.');
+                });
+            });
+            
+            columns.forEach(column => {
+                column.addEventListener('dragover', e => e.preventDefault());
+                column.addEventListener('drop', function(e) {
+                    e.preventDefault();
+                    const taskId = e.dataTransfer.getData('text/plain');
+                    const task = document.querySelector(`.task-card[data-id="${taskId}"]`);
+                    if (task && task.parentNode !== this) {
+                        this.appendChild(task);
+                        showBasicNotification('Colaborador movido de etapa!', 'success');
+                        updateColumnCounts();
+                    }
+                });
+            });
+        }
+        
+        function createTaskFallback(formElement) {
+            const formData = new FormData(formElement);
+            const id = 'colab-' + Date.now();
+            const card = document.createElement('div');
+            
+            const priority = formData.get('priority');
+            card.className = `task-card ${priority === 'high' ? 'high-priority' : 'medium-priority'}`;
+            card.dataset.id = id;
+            card.setAttribute('draggable', 'true');
+            
+            const title = formData.get('title') || 'Novo Colaborador';
+            // Pega as iniciais do nome para criar o Avatar (ex: "Roberto Alves" -> "RA")
+            const initials = title.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase() || 'NO';
+            
+            const dept = formData.get('department');
+            const deptLabel = dept === 'rh' ? 'RH' : dept === 'ti' ? 'TI' : dept === 'sesmt' ? 'SESMT' : 'GESTÃO';
+            
+            card.innerHTML = `
+                <div class="task-header">
+                    <div class="task-tags">
+                        <span class="task-tag" style="background: ${priority === 'high' ? 'rgba(255, 59, 48, 0.1)' : '#E5E5EA'}; color: ${priority === 'high' ? '#FF3B30' : '#333'};">${priority === 'high' ? 'URGENTE' : 'NO PRAZO'}</span>
+                        <span class="task-tag" style="background: #E5E5EA; color: #333;">${deptLabel}</span>
+                    </div>
+                    <div class="task-actions">
+                        <button class="task-action-btn edit-task" title="Editar"><i class="fas fa-edit"></i></button>
+                        <button class="task-action-btn delete-task" title="Arquivar"><i class="fas fa-archive"></i></button>
+                    </div>
+                </div>
+                <h4 class="task-title">${title}</h4>
+                <p class="task-description">${formData.get('description') || ''}</p>
+                <div class="task-footer">
+                    <div class="task-assignee">
+                        <div class="assignee-avatar">${initials}</div>
+                        <span class="assignee-name">Em Integração</span>
+                    </div>
+                    <div class="task-deadline"><i class="far fa-calendar"></i><span>${formData.get('deadline') || 'A definir'}</span></div>
+                </div>
+            `;
+            
+            // Adiciona o card na coluna que foi selecionada no modal
+            const targetCol = document.getElementById(dept + '-column') || document.getElementById('rh-column');
+            targetCol.appendChild(card);
+            
+            document.getElementById('taskModal').style.display = 'none';
+            document.body.style.overflow = '';
+            
+            updateColumnCounts();
+            setupBasicKanban(); // Re-adiciona os eventos de drag & drop para incluir o novo card
+            showBasicNotification('Colaborador adicionado ao fluxo!', 'success');
+        }
+
+        function showBasicNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed; top: 100px; right: 20px;
+                background: ${type === 'success' ? '#34C759' : '#FF3B30'};
+                color: white; padding: 15px 20px; border-radius: 8px;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.15); z-index: 10000;
+                animation: slideIn 0.3s ease;
+            `;
+            notification.textContent = message;
+            document.body.appendChild(notification);
+            setTimeout(() => {
+                notification.style.animation = 'slideOut 0.3s ease';
+                setTimeout(() => notification.remove(), 300);
+            }, 3000);
+        }
+
+        function updateColumnCounts() {
+            document.querySelectorAll('.kanban-column').forEach(col => {
+                const count = col.querySelectorAll('.task-card').length;
+                const badge = col.querySelector('.column-count');
+                if(badge) badge.textContent = count;
+            });
+        }
+
+        function filterTasksByDepartment(dept) {
+            document.querySelectorAll('.task-card').forEach(task => {
+                if (dept === 'todos') {
+                    task.style.display = 'block';
+                } else {
+                    const hasTag = task.querySelector('.task-tags').textContent.toLowerCase().includes(dept);
+                    task.style.display = hasTag ? 'block' : 'none';
+                }
+            });
+        }
+    </script>
+</body>
+</html>

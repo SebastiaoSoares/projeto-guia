@@ -4,9 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GUIA - Gestão Unificada de Integração e Acolhimento</title>
-    <link rel="stylesheet" href="styles/main.css">
+    <link rel="stylesheet" href="/static/styles/main.css">    
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="icon" type="image/x-icon" href="assets/favicon.ico">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css">
+    <link rel="icon" type="image/x-icon" href="/static/assets/favicon.ico">
 </head>
 <body>
     <!-- Header -->
@@ -14,15 +15,17 @@
         <div class="container">
             <div class="header-content">
                 <div class="logo">
-                    <i class="fas fa-rocket rocket-icon"></i>
-                    <span class="logo-text">GUIA<span>
+                    <a href="/" style="text-decoration: none; color: inherit; display: flex; align-items: center; gap: 10px;">
+                        <i class="fas fa-rocket rocket-icon"></i>
+                        <span class="logo-text">GUIA</span>
+                    </a>
                 </div>
                 <nav class="main-nav">
                     <ul>
                         <li><a href="#features">Funcionalidades</a></li>
                         <li><a href="#how-it-works">Como Funciona</a></li>
                         <li><a href="#about">Sobre Nós</a></li>
-                        <li><a href="dashboard.html" class="nav-button">Acessar Sistema</a></li>
+                        <li><a href="/dashboard" class="nav-button">Acessar Painel (Empresa)</a></li>
                     </ul>
                 </nav>
                 <button class="mobile-menu-btn">
@@ -36,71 +39,61 @@
     <section class="hero-section">
         <div class="container">
             <div class="hero-content">
-                <div class="hero-text">
-                    <h1 class="hero-title">Gestão Visual que <span class="highlight">Acelera</span> seu Time</h1>
-                    <p class="hero-subtitle">Criado por aprendizes para empresas que buscam eficiência. Organize tarefas, otimize onboarding e aumente a produtividade com visualização intuitiva.</p>
+                <div class="hero-text" data-aos="fade-right">
+                    <h1 class="hero-title">O <span class="highlight">Onboarding</span> da sua empresa em um só lugar</h1>
+                    <p class="hero-subtitle">Conecte o RH, TI, SESMT e <strong>qualquer outro setor</strong> através de um <strong>checklist único e totalmente personalizável</strong>. Ofereça uma integração ágil e acolhedora para os seus novos colaboradores.</p>
                     <div class="hero-buttons">
+                        <a href="/plataforma" class="btn btn-primary btn-large">Começar</a>
                     </div>
                     <div class="hero-stats">
                         <div class="stat">
-                            <span class="stat-number">+85%</span>
-                            <span class="stat-text">Produtividade</span>
-                        </div>
-                        <div class="stat">
-                            <span class="stat-number">-70%</span>
-                            <span class="stat-text">Tempo de Onboarding</span>
-                        </div>
-                        <div class="stat">
                             <span class="stat-number">100%</span>
-                            <span class="stat-text">Visual</span>
+                            <span class="stat-text">Transparência</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-number">0%</span>
+                            <span class="stat-text">Silos de Comunicação</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-number">1</span>
+                            <span class="stat-text">Única Fonte da Verdade</span>
                         </div>
                     </div>
                 </div>
-                <div class="hero-image">
+                <div class="hero-image" data-aos="fade-left" data-aos-delay="200">
                     <div class="dashboard-preview">
                         <div class="preview-header">
                             <div class="preview-tabs">
-                                <span class="tab active">RH</span>
-                                <span class="tab">TI</span>
-                                <span class="tab">Vendas</span>
-                                <span class="tab">Operações</span>
-                            </div>
-                            <div class="preview-actions">
-                                <i class="fas fa-plus"></i>
+                                <span class="tab active">Integração RH</span>
+                                <span class="tab">Acessos TI</span>
+                                <span class="tab">Exames SESMT</span>
+                                <span class="tab" style="color: var(--primary-red);"><i class="fas fa-plus"></i> Setor</span>
                             </div>
                         </div>
                         <div class="kanban-preview">
                             <div class="kanban-column">
                                 <div class="column-header" style="border-color: #FF3B30;">
                                     <h3>A Fazer</h3>
-                                    <span class="task-count">3</span>
                                 </div>
                                 <div class="task-card">
                                     <div class="task-tags">
-                                        <span class="tag urgent">URGENTE</span>
-                                        <span class="tag onboarding">ONBOARDING</span>
+                                        <span class="tag urgent">TI</span>
+                                        <span class="tag onboarding">NOVO COLABORADOR</span>
                                     </div>
-                                    <h4>Integrar novo colaborador</h4>
-                                    <p>Configurar acessos e treinamento inicial</p>
-                                    <div class="task-footer">
-                                        <div class="assignee">
-                                            <div class="avatar">JS</div>
-                                            <span>Joana Silva</span>
-                                        </div>
-                                        <span class="deadline">Hoje</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="kanban-column">
-                                <div class="column-header" style="border-color: #FF9500;">
-                                    <h3>Em Andamento</h3>
-                                    <span class="task-count">2</span>
+                                    <h4>Criar e-mail corporativo</h4>
+                                    <p style="font-size: 0.85rem;">Configurar acessos para: João Silva</p>
                                 </div>
                             </div>
                             <div class="kanban-column">
                                 <div class="column-header" style="border-color: #34C759;">
                                     <h3>Concluído</h3>
-                                    <span class="task-count">5</span>
+                                </div>
+                                <div class="task-card" style="opacity: 0.7;">
+                                    <div class="task-tags">
+                                        <span class="tag" style="background: rgba(52, 199, 89, 0.1); color: #34C759;">RH</span>
+                                    </div>
+                                    <h4>Assinatura de Contrato</h4>
+                                    <p style="font-size: 0.85rem;">Documentação validada e assinada.</p>
                                 </div>
                             </div>
                         </div>
@@ -113,52 +106,38 @@
     <!-- Features Section -->
     <section id="features" class="features-section">
         <div class="container">
-            <div class="section-header">
-                <h2>Potencialize seu Time com Visualização</h2>
-                <p>Desenvolvido por aprendizes apaixonados por resolver problemas reais das empresas</p>
+            <div class="section-header" data-aos="fade-up">
+                <h2>O fim das falhas de comunicação no Onboarding</h2>
+                <p>Uma plataforma pensada para eliminar a troca excessiva de e-mails e planilhas soltas durante a admissão.</p>
             </div>
             <div class="features-grid">
-                <div class="feature-card">
+                <div class="feature-card" data-aos="fade-up" data-aos-delay="100">
                     <div class="feature-icon" style="background-color: rgba(255, 59, 48, 0.1);">
-                        <i class="fas fa-columns" style="color: #FF3B30;"></i>
+                        <i class="fas fa-tasks" style="color: #FF3B30;"></i>
                     </div>
-                    <h3>Quadros por Departamento</h3>
-                    <p>Organize tarefas visualmente com quadros personalizáveis para cada setor da empresa.</p>
+                    <h3>Checklist Unificado</h3>
+                    <p>Crie colunas personalizadas para qualquer setor (RH, TI, SESMT, Gestores, etc.). Todos acompanham e dão baixa nas etapas numa única fonte de verdade.</p>
                 </div>
-                <div class="feature-card">
+                <div class="feature-card" data-aos="fade-up" data-aos-delay="200">
                     <div class="feature-icon" style="background-color: rgba(255, 149, 0, 0.1);">
-                        <i class="fas fa-user-friends" style="color: #FF9500;"></i>
+                        <i class="fas fa-heart" style="color: #FF9500;"></i>
                     </div>
-                    <h3>Onboarding Visual</h3>
-                    <p>Guie novos colaboradores com checklists interativos e progresso visível.</p>
+                    <h3>Acolhimento Real</h3>
+                    <p>Módulo exclusivo para o novo colaborador, com manuais, vídeos de boas-vindas e primeiros passos sem sobrecarregar a equipe.</p>
                 </div>
-                <div class="feature-card">
+                <div class="feature-card" data-aos="fade-up" data-aos-delay="300">
                     <div class="feature-icon" style="background-color: rgba(52, 199, 89, 0.1);">
-                        <i class="fas fa-chart-line" style="color: #34C759;"></i>
+                        <i class="fas fa-columns" style="color: #34C759;"></i>
                     </div>
-                    <h3>Métricas em Tempo Real</h3>
-                    <p>Acompanhe produtividade e identifique gargalos com dados visuais.</p>
+                    <h3>Gestão Kanban</h3>
+                    <p>Painel de controle visual onde cada departamento enxerga exatamente o que precisa ser feito para integrar o funcionário.</p>
                 </div>
-                <div class="feature-card">
+                <div class="feature-card" data-aos="fade-up" data-aos-delay="400">
                     <div class="feature-icon" style="background-color: rgba(0, 122, 255, 0.1);">
-                        <i class="fas fa-sync-alt" style="color: #007AFF;"></i>
+                        <i class="fas fa-bell" style="color: #007AFF;"></i>
                     </div>
-                    <h3>Atualizações Automáticas</h3>
-                    <p>Notificações em tempo real quando tarefas são movidas ou atualizadas.</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon" style="background-color: rgba(255, 204, 0, 0.1);">
-                        <i class="fas fa-mobile-alt" style="color: #FFCC00;"></i>
-                    </div>
-                    <h3>Totalmente Responsivo</h3>
-                    <p>Acesse de qualquer dispositivo com interface intuitiva e arrastar-e-soltar.</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon" style="background-color: rgba(175, 82, 222, 0.1);">
-                        <i class="fas fa-shield-alt" style="color: #AF52DE;"></i>
-                    </div>
-                    <h3>Segurança Empresarial</h3>
-                    <p>Controle de acesso por níveis e backup automático dos dados.</p>
+                    <h3>Zero Pendências</h3>
+                    <p>Evite que o colaborador chegue no primeiro dia de trabalho sem computador, sem e-mail ou sem os acessos aos sistemas configurados.</p>
                 </div>
             </div>
         </div>
@@ -167,27 +146,26 @@
     <!-- How It Works -->
     <section id="how-it-works" class="how-it-works">
         <div class="container">
-            <div class="section-header">
-                <h2>Simples, Visual, Eficiente</h2>
-                <p>Três passos para transformar a gestão da sua empresa</p>
+            <div class="section-header" data-aos="fade-up">
+                <h2>Como o GUIA funciona</h2>
+                <p>O fluxo de entrada perfeito, conectando todos os responsáveis</p>
             </div>
             <div class="steps-container">
-                <div class="step">
+                <div class="step" data-aos="fade-right" data-aos-delay="100">
                     <div class="step-number">1</div>
-                    <h3>Crie seus Quadros</h3>
-                    <p>Configure quadros visuais para cada departamento com colunas personalizadas.</p>
+                    <h3>O RH Inicia</h3>
+                    <p>O Setor Pessoal cadastra a entrada do funcionário, enviando automaticamente a demanda para os outros setores.</p>
                 </div>
-                <div class="step-line"></div>
-                <div class="step">
+                <div class="step-line" data-aos="zoom-in" data-aos-delay="400"></div>
+                <div class="step" data-aos="fade-up" data-aos-delay="200">
                     <div class="step-number">2</div>
-                    <h3>Adicione Tarefas</h3>
-                    <p>Inclua atividades com responsáveis, prazos, prioridades e documentos.</p>
+                    <h3>Setores Preparam</h3>
+                    <p>A TI configura acessos, o Laboratório libera credenciais, o SESMT agenda exames. Você define os setores.</p>
                 </div>
-                <div class="step-line"></div>
-                <div class="step">
+                <div class="step" data-aos="fade-left" data-aos-delay="300">
                     <div class="step-number">3</div>
-                    <h3>Acompanhe e Otimize</h3>
-                    <p>Monitore o progresso visualmente e identifique oportunidades de melhoria.</p>
+                    <h3>Colaborador Acolhido</h3>
+                    <p>No 1º dia, ele faz login na visão do colaborador, acessa o manual da empresa e completa as tarefas de boas-vindas.</p>
                 </div>
             </div>
         </div>
@@ -197,35 +175,27 @@
     <section id="about" class="about-section">
         <div class="container">
             <div class="about-content">
-                <div class="about-text">
-                    <h2>Criado por Aprendizes, <span class="highlight">Feito para Empresas</span></h2>
-                    <p>Somos um grupo de aprendizes que identificou um problema comum nas empresas: a falta de visualização clara das tarefas e processos de onboarding.</p>
-                    <p>Desenvolvemos o projeto GUIA para transformar a gestão corporativa em uma experiência visual, intuitiva e eficiente. Acreditamos que ferramentas simples podem gerar grandes resultados.</p>
+                <div class="about-text" data-aos="fade-right">
+                    <h2>Nascido na sala de aula, <span class="highlight">desenvolvido para o mercado</span></h2>
+                    <p>O GUIA surgiu da identificação de uma dor real do mercado corporativo: a desorganização nos processos de admissão. Quando RH, TI e Gestores não se comunicam, o novo colaborador é quem sofre.</p>
+                    <p>O conceito, a regra de negócio e toda a identidade deste projeto foram idealizados e desenvolvidos de forma colaborativa.</p>
+                    
                     <div class="team-highlight">
-                        <i class="fas fa-lightbulb"></i>
-                        <p>"Nossa missão é democratizar a gestão visual para empresas de todos os tamanhos."</p>
+                        <i class="fas fa-graduation-cap"></i>
+                        <div>
+                            <p style="margin-bottom: 5px;"><strong>Projeto Final Integrador</strong></p>
+                            <p style="font-size: 0.9rem; margin-bottom: 12px;">
+                                Desenvolvido pela turma de Aprendizagem Comercial <strong>2025-09-75</strong> (SENAC-CE, polo Crato), orientados por <strong>Suzana Oliveira</strong>. A fundamentação e os dados do projeto estão em nosso 
+                                <a href="#" target="_blank" style="color: var(--primary-red); text-decoration: underline; font-weight: 600;">documento geral de pesquisa</a>.
+                            </p>
+                            <a href="https://github.com/sebastiaosoares/projeto-guia" target="_blank" class="btn btn-outline" style="padding: 6px 12px; font-size: 0.85rem; border-width: 1px;">
+                                <i class="fab fa-github"></i> Código Aberto (Devs: Sebastião, Suyane e Renan)
+                            </a>
+                        </div>
                     </div>
                 </div>
-                <div class="about-image">
-                    <div class="team-illustration">
-                        <div class="person person-1">
-                            <div class="avatar-large">DS</div>
-                            <span>Designer</span>
-                        </div>
-                        <div class="person person-2">
-                            <div class="avatar-large">DV</div>
-                            <span>Desenvolvedor</span>
-                        </div>
-                        <div class="person person-3">
-                            <div class="avatar-large">GP</div>
-                            <span>Gestor de Projeto</span>
-                        </div>
-                        <div class="connection-line"></div>
-                        <div class="project-result">
-                            <i class="fas fa-rocket"></i>
-                            <span>GUIA</span>
-                        </div>
-                    </div>
+                <div class="about-image" data-aos="fade-left">
+                    <img src="https://images.unsplash.com/photo-1531482615713-2afd69097998?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Turma de alunos reunida trabalhando em projeto no computador" style="width: 100%; border-radius: 20px; box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15); display: block;">
                 </div>
             </div>
         </div>
@@ -238,56 +208,40 @@
                 <div class="footer-brand">
                     <div class="logo">
                         <i class="fas fa-rocket rocket-icon"></i>
-                        <span class="logo-text">GUIA<span class="logo-flow">
+                        <span class="logo-text" style="color: white;">GUIA</span>
                     </div>
-                    <p class="footer-tagline">Gestão visual feita por aprendizes para empresas inteligentes.</p>
-                    <div class="social-links">
-                        <a href="#"><i class="fab fa-twitter"></i></a>
-                        <a href="#"><i class="fab fa-linkedin"></i></a>
-                        <a href="#"><i class="fab fa-github"></i></a>
-                        <a href="#"><i class="fab fa-instagram"></i></a>
-                    </div>
+                    <p class="footer-tagline">Gestão Unificada de Integração e Acolhimento.</p>
+                    <p style="color: var(--gray-light); font-size: 0.85rem; margin-top: 10px;">
+                        Uma solução desenvolvida pela turma de Aprendizagem Comercial SENAC-CE Crato (2025-09-75). Fica reservado à turma o direito exclusivo do conceito. Código aberto sob Licença MIT.
+                    </p>
                 </div>
                 <div class="footer-links">
                     <div class="link-group">
-                        <h4>Produto</h4>
-                        <a href="#">Funcionalidades</a>
-                        <a href="#">API</a>
-                        <a href="#">Status</a>
+                        <h4>Acessos Rápidos</h4>
+                        <a href="/">Página Inicial</a>
+                        <a href="/plataforma/dashboard">Dashboard (Kanban)</a>
+                        <a href="/plataforma/onboarding">Onboarding (Colaborador)</a>
                     </div>
                     <div class="link-group">
-                        <h4>Empresa</h4>
-                        <a href="#">Sobre Nós</a>
-                        <a href="#">Carreiras</a>
-                        <a href="#">Blog</a>
-                        <a href="#">Contato</a>
-                    </div>
-                    <div class="link-group">
-                        <h4>Recursos</h4>
-                        <a href="#">Documentação</a>
-                        <a href="#">Tutoriais</a>
-                        <a href="#">Suporte</a>
-                        <a href="#">Comunidade</a>
-                    </div>
-                    <div class="link-group">
-                        <h4>Legal</h4>
-                        <a href="#">Privacidade</a>
-                        <a href="#">Termos</a>
-                        <a href="#">Segurança</a>
-                        <a href="#">Cookies</a>
+                        <h4>Projeto</h4>
+                        <a href="#features">A Solução</a>
+                        <a href="#how-it-works">Metodologia</a>
+                        <a href="#about">Turma SENAC</a>
+                        <a href="#" target="_blank">Documento de Pesquisa</a>
                     </div>
                 </div>
             </div>
             <div class="footer-bottom">
-                <p>&copy; 2026 GUIA. Desenvolvido com ❤️ por aprendizes senac. Todos os direitos reservados.</p>
+                <p>&copy; 2026 Sebastião Soares, Suyane Oliveira, Renan Lenno e Turma SENAC-CE.</p>
                 <div class="footer-bottom-links">
-                    <span>Português (BR)</span>
-                    <span>Brasil</span>
+                    <span>Crato, CE - Brasil</span>
                 </div>
             </div>
         </div>
     </footer>
 
-    <script src="scripts/main.js"></script>
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+    <script src="/static/scripts/main.js"></script>
 </body>
 </html>
