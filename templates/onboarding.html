@@ -179,6 +179,7 @@
             justify-content: center;
             cursor: pointer;
             transition: all 0.2s ease;
+            background: #FFF;
         }
         
         .task-checkbox.checked {
@@ -365,6 +366,9 @@
         <div class="onboarding-header">
             <h1>🚀 Bem-vindo ao GUIA!</h1>
             <p>Sua jornada de integração começa aqui. Complete cada etapa para se familiarizar com a empresa e suas responsabilidades.</p>
+            <p style="font-size: 0.9rem; color: #FF3B30; margin-top: 10px;">
+                <i class="fas fa-clock"></i> Clique nas caixas para marcar/desmarcar a qualquer momento
+            </p>
         </div>
         
         <!-- Progress Bar -->
@@ -374,16 +378,16 @@
             </div>
             <div class="progress-info">
                 <div class="progress-text">
-                    <span id="completedSteps">1</span> de <span id="totalSteps">4</span> etapas completadas
+                    <span id="completedTasks">3</span> de <span id="totalTasks">23</span> tarefas completadas
                 </div>
-                <div class="progress-percentage" id="progressPercentage">25%</div>
+                <div class="progress-percentage" id="progressPercentage">13%</div>
             </div>
         </div>
         
         <!-- Onboarding Steps -->
         <div class="onboarding-steps">
             <!-- Step 1 -->
-            <div class="step-card completed">
+            <div class="step-card" id="step1">
                 <div class="step-header">
                     <div class="step-title">
                         <div class="step-number">1</div>
@@ -393,7 +397,7 @@
                         </div>
                     </div>
                     <div class="step-status">
-                        <span class="task-status completed">CONCLUÍDO</span>
+                        <span class="task-status completed" id="step1Status">CONCLUÍDO</span>
                     </div>
                 </div>
                 <div class="step-content">
@@ -401,23 +405,23 @@
                     <p>Para formalizar sua entrada na empresa, precisamos que você revise e assine alguns documentos importantes.</p>
                     
                     <div class="step-tasks">
-                        <ul class="task-list">
+                        <ul class="task-list" id="step1Tasks">
                             <li class="task-item">
-                                <div class="task-checkbox checked">
+                                <div class="task-checkbox checked" onclick="toggleTask(this, 1)">
                                     <i class="fas fa-check"></i>
                                 </div>
                                 <div class="task-text">Contrato de trabalho assinado</div>
                                 <span class="task-status completed">Concluído</span>
                             </li>
                             <li class="task-item">
-                                <div class="task-checkbox checked">
+                                <div class="task-checkbox checked" onclick="toggleTask(this, 1)">
                                     <i class="fas fa-check"></i>
                                 </div>
                                 <div class="task-text">Documentos pessoais enviados</div>
                                 <span class="task-status completed">Concluído</span>
                             </li>
                             <li class="task-item">
-                                <div class="task-checkbox checked">
+                                <div class="task-checkbox checked" onclick="toggleTask(this, 1)">
                                     <i class="fas fa-check"></i>
                                 </div>
                                 <div class="task-text">Dados bancários cadastrados</div>
@@ -429,7 +433,7 @@
             </div>
             
             <!-- Step 2 -->
-            <div class="step-card current">
+            <div class="step-card current" id="step2">
                 <div class="step-header">
                     <div class="step-title">
                         <div class="step-number">2</div>
@@ -439,7 +443,7 @@
                         </div>
                     </div>
                     <div class="step-status">
-                        <span class="task-status pending">EM ANDAMENTO</span>
+                        <span class="task-status pending" id="step2Status">EM ANDAMENTO</span>
                     </div>
                 </div>
                 <div class="step-content">
@@ -447,30 +451,30 @@
                     <p>Conheça nossa cultura, valores e os principais processos da empresa para começar com o pé direito.</p>
                     
                     <div class="step-tasks">
-                        <ul class="task-list">
+                        <ul class="task-list" id="step2Tasks">
                             <li class="task-item">
-                                <div class="task-checkbox checked">
+                                <div class="task-checkbox checked" onclick="toggleTask(this, 2)">
                                     <i class="fas fa-check"></i>
                                 </div>
                                 <div class="task-text">Assistir ao vídeo de boas-vindas</div>
                                 <span class="task-status completed">Concluído</span>
                             </li>
                             <li class="task-item">
-                                <div class="task-checkbox" onclick="toggleTask(this)">
+                                <div class="task-checkbox" onclick="toggleTask(this, 2)">
                                     <i class="fas fa-check"></i>
                                 </div>
                                 <div class="task-text">Ler o manual do colaborador</div>
                                 <span class="task-status pending">Pendente</span>
                             </li>
                             <li class="task-item">
-                                <div class="task-checkbox" onclick="toggleTask(this)">
+                                <div class="task-checkbox" onclick="toggleTask(this, 2)">
                                     <i class="fas fa-check"></i>
                                 </div>
                                 <div class="task-text">Completar quiz sobre cultura</div>
                                 <span class="task-status pending">Pendente</span>
                             </li>
                             <li class="task-item">
-                                <div class="task-checkbox" onclick="toggleTask(this)">
+                                <div class="task-checkbox" onclick="toggleTask(this, 2)">
                                     <i class="fas fa-check"></i>
                                 </div>
                                 <div class="task-text">Conhecer a estrutura organizacional</div>
@@ -480,18 +484,15 @@
                     </div>
                     
                     <div class="step-actions">
-                        <button class="btn-skip" onclick="skipStep()">
+                        <button class="btn-skip" onclick="skipStep(2)">
                             <i class="fas fa-forward"></i> Pular para próxima
-                        </button>
-                        <button class="btn-complete" onclick="completeStep(2)">
-                            <i class="fas fa-check-circle"></i> Marcar como concluída
                         </button>
                     </div>
                 </div>
             </div>
             
             <!-- Step 3 -->
-            <div class="step-card">
+            <div class="step-card" id="step3">
                 <div class="step-header">
                     <div class="step-title">
                         <div class="step-number">3</div>
@@ -501,7 +502,7 @@
                         </div>
                     </div>
                     <div class="step-status">
-                        <span class="task-status pending">PRÓXIMA</span>
+                        <span class="task-status pending" id="step3Status">PRÓXIMA</span>
                     </div>
                 </div>
                 <div class="step-content">
@@ -509,30 +510,30 @@
                     <p>Configure todas as ferramentas e acessos necessários para desempenhar suas funções.</p>
                     
                     <div class="step-tasks">
-                        <ul class="task-list">
+                        <ul class="task-list" id="step3Tasks">
                             <li class="task-item">
-                                <div class="task-checkbox" onclick="toggleTask(this)">
+                                <div class="task-checkbox" onclick="toggleTask(this, 3)">
                                     <i class="fas fa-check"></i>
                                 </div>
                                 <div class="task-text">Configurar email corporativo</div>
                                 <span class="task-status pending">Pendente</span>
                             </li>
                             <li class="task-item">
-                                <div class="task-checkbox" onclick="toggleTask(this)">
+                                <div class="task-checkbox" onclick="toggleTask(this, 3)">
                                     <i class="fas fa-check"></i>
                                 </div>
                                 <div class="task-text">Instalar ferramentas necessárias</div>
                                 <span class="task-status pending">Pendente</span>
                             </li>
                             <li class="task-item">
-                                <div class="task-checkbox" onclick="toggleTask(this)">
+                                <div class="task-checkbox" onclick="toggleTask(this, 3)">
                                     <i class="fas fa-check"></i>
                                 </div>
                                 <div class="task-text">Configurar acesso aos sistemas</div>
                                 <span class="task-status pending">Pendente</span>
                             </li>
                             <li class="task-item">
-                                <div class="task-checkbox" onclick="toggleTask(this)">
+                                <div class="task-checkbox" onclick="toggleTask(this, 3)">
                                     <i class="fas fa-check"></i>
                                 </div>
                                 <div class="task-text">Testar equipamento fornecido</div>
@@ -544,7 +545,7 @@
             </div>
             
             <!-- Step 4 -->
-            <div class="step-card">
+            <div class="step-card" id="step4">
                 <div class="step-header">
                     <div class="step-title">
                         <div class="step-number">4</div>
@@ -554,7 +555,7 @@
                         </div>
                     </div>
                     <div class="step-status">
-                        <span class="task-status pending">BLOQUEADA</span>
+                        <span class="task-status pending" id="step4Status">BLOQUEADA</span>
                     </div>
                 </div>
                 <div class="step-content">
@@ -562,30 +563,30 @@
                     <p>Execute suas primeiras atividades com acompanhamento do seu gestor e colegas de equipe.</p>
                     
                     <div class="step-tasks">
-                        <ul class="task-list">
+                        <ul class="task-list" id="step4Tasks">
                             <li class="task-item">
-                                <div class="task-checkbox" onclick="toggleTask(this)">
+                                <div class="task-checkbox" onclick="toggleTask(this, 4)">
                                     <i class="fas fa-check"></i>
                                 </div>
                                 <div class="task-text">Reunião com gestor direto</div>
                                 <span class="task-status pending">Pendente</span>
                             </li>
                             <li class="task-item">
-                                <div class="task-checkbox" onclick="toggleTask(this)">
+                                <div class="task-checkbox" onclick="toggleTask(this, 4)">
                                     <i class="fas fa-check"></i>
                                 </div>
                                 <div class="task-text">Primeira tarefa no Kairós</div>
                                 <span class="task-status pending">Pendente</span>
                             </li>
                             <li class="task-item">
-                                <div class="task-checkbox" onclick="toggleTask(this)">
+                                <div class="task-checkbox" onclick="toggleTask(this, 4)">
                                     <i class="fas fa-check"></i>
                                 </div>
                                 <div class="task-text">Apresentação para equipe</div>
                                 <span class="task-status pending">Pendente</span>
                             </li>
                             <li class="task-item">
-                                <div class="task-checkbox" onclick="toggleTask(this)">
+                                <div class="task-checkbox" onclick="toggleTask(this, 4)">
                                     <i class="fas fa-check"></i>
                                 </div>
                                 <div class="task-text">Feedback inicial 1:1</div>
@@ -699,42 +700,80 @@
 
     <script>
         // Controle de progresso
-        let completedTasks = 3; // Começa com 3 tarefas completas da etapa 1
         let totalTasks = 23; // Total de tarefas em todas as etapas
+        
+        // Array para contar tarefas por etapa
+        const tasksPerStep = [3, 4, 4, 4]; // Etapa 1: 3 tasks, Etapa 2: 4 tasks, etc.
         
         function updateProgress() {
             const progressFill = document.getElementById('progressFill');
             const progressPercentage = document.getElementById('progressPercentage');
-            const completedSteps = document.getElementById('completedSteps');
+            const completedTasksSpan = document.getElementById('completedTasks');
             
-            const percentage = Math.round((completedTasks / totalTasks) * 100);
+            // Contar tarefas concluídas
+            let completed = 0;
+            const allCheckboxes = document.querySelectorAll('.task-checkbox.checked');
+            completed = allCheckboxes.length;
+            
+            completedTasksSpan.textContent = completed;
+            
+            const percentage = Math.round((completed / totalTasks) * 100);
             
             progressFill.style.width = `${percentage}%`;
             progressPercentage.textContent = `${percentage}%`;
             
-            // Atualiza etapas completadas (baseado em tarefas)
-            let steps = 1; // Sempre começa com 1 etapa completa
-            if (completedTasks >= 7) steps = 2;
-            if (completedTasks >= 14) steps = 3;
-            if (completedTasks >= 21) steps = 4;
-            
-            completedSteps.textContent = steps;
+            // Atualizar status das etapas baseado nas tarefas concluídas
+            updateStepStatuses();
         }
         
-        // Alterna estado da tarefa
-        function toggleTask(checkbox) {
+        function updateStepStatuses() {
+            for (let step = 1; step <= 4; step++) {
+                const stepTasks = document.getElementById(`step${step}Tasks`);
+                const checkboxes = stepTasks.querySelectorAll('.task-checkbox');
+                const checkedBoxes = stepTasks.querySelectorAll('.task-checkbox.checked');
+                const stepCard = document.getElementById(`step${step}`);
+                const statusSpan = document.getElementById(`step${step}Status`);
+                
+                if (checkedBoxes.length === checkboxes.length) {
+                    // Todas as tarefas concluídas
+                    stepCard.classList.add('completed');
+                    stepCard.classList.remove('current');
+                    statusSpan.textContent = 'CONCLUÍDO';
+                    statusSpan.className = 'task-status completed';
+                } else if (checkedBoxes.length > 0) {
+                    // Algumas tarefas concluídas
+                    stepCard.classList.remove('completed');
+                    statusSpan.textContent = 'EM ANDAMENTO';
+                    statusSpan.className = 'task-status pending';
+                } else {
+                    // Nenhuma tarefa concluída
+                    stepCard.classList.remove('completed');
+                    if (step === 1) {
+                        statusSpan.textContent = 'PENDENTE';
+                    } else if (step === 2) {
+                        statusSpan.textContent = 'PRÓXIMA';
+                    } else if (step === 3) {
+                        statusSpan.textContent = 'PRÓXIMA';
+                    } else if (step === 4) {
+                        statusSpan.textContent = 'BLOQUEADA';
+                    }
+                    statusSpan.className = 'task-status pending';
+                }
+            }
+        }
+        
+        // Alterna estado da tarefa (agora permite marcar e desmarcar livremente)
+        function toggleTask(checkbox, stepNumber) {
             checkbox.classList.toggle('checked');
             
-            // Atualiza contador
+            // Atualiza status visual da tarefa
+            const taskItem = checkbox.closest('.task-item');
+            const statusSpan = taskItem.querySelector('.task-status');
+            
             if (checkbox.classList.contains('checked')) {
-                completedTasks++;
-                // Atualiza status visual
-                const statusSpan = checkbox.closest('.task-item').querySelector('.task-status');
                 statusSpan.textContent = 'Concluído';
                 statusSpan.className = 'task-status completed';
             } else {
-                completedTasks--;
-                const statusSpan = checkbox.closest('.task-item').querySelector('.task-status');
                 statusSpan.textContent = 'Pendente';
                 statusSpan.className = 'task-status pending';
             }
@@ -742,58 +781,41 @@
             updateProgress();
         }
         
-        // Completa etapa
-        function completeStep(stepNumber) {
-            const stepCard = document.querySelectorAll('.step-card')[stepNumber - 1];
-            const nextStepCard = document.querySelectorAll('.step-card')[stepNumber];
-            
-            // Marca etapa atual como completada
-            stepCard.classList.remove('current');
-            stepCard.classList.add('completed');
-            
-            // Ativa próxima etapa
-            if (nextStepCard) {
-                nextStepCard.classList.add('current');
-            }
-            
-            // Atualiza todas as tarefas da etapa como concluídas
-            const checkboxes = stepCard.querySelectorAll('.task-checkbox:not(.checked)');
-            checkboxes.forEach(checkbox => {
-                if (!checkbox.classList.contains('checked')) {
-                    checkbox.classList.add('checked');
-                    completedTasks++;
-                    
-                    // Atualiza status visual
-                    const statusSpan = checkbox.closest('.task-item').querySelector('.task-status');
-                    statusSpan.textContent = 'Concluído';
-                    statusSpan.className = 'task-status completed';
-                }
-            });
-            
-            updateProgress();
-            
-            // Feedback visual
-            alert(`Etapa ${stepNumber} marcada como concluída!`);
-        }
-        
-        // Pula etapa
-        function skipStep() {
-            const currentStep = document.querySelector('.step-card.current');
-            const nextStepCard = currentStep.nextElementSibling;
+        // Pula etapa - apenas avança visualmente, não altera tarefas
+        function skipStep(currentStep) {
+            const currentStepCard = document.getElementById(`step${currentStep}`);
+            const nextStepCard = document.getElementById(`step${currentStep + 1}`);
             
             if (nextStepCard) {
-                currentStep.classList.remove('current');
+                currentStepCard.classList.remove('current');
                 nextStepCard.classList.add('current');
                 
                 // Rola para a próxima etapa
                 nextStepCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                
-                alert('Etapa pulada! Você pode voltar e completá-la depois.');
             }
         }
         
         // Inicializa progresso
-        document.addEventListener('DOMContentLoaded', updateProgress);
+        document.addEventListener('DOMContentLoaded', function() {
+            updateProgress();
+            
+            // Adiciona evento de clique para todas as checkboxes
+            document.querySelectorAll('.task-checkbox').forEach(checkbox => {
+                // Remove o onclick do HTML para evitar duplicação
+                checkbox.removeAttribute('onclick');
+                // Adiciona evento via JavaScript
+                checkbox.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    const stepCard = this.closest('.step-card');
+                    const stepId = stepCard.id;
+                    const stepNumber = parseInt(stepId.replace('step', ''));
+                    toggleTask(this, stepNumber);
+                });
+            });
+            
+            // Atualiza status iniciais das etapas
+            updateStepStatuses();
+        });
         
         // Menu mobile
         const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
