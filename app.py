@@ -33,6 +33,10 @@ def index():
 def login():
     return render_template('plataforma/login.html')
 
+@app.route('/cadastro')
+def cadastro():
+    return render_template('plataforma/cadastro.html')
+
 @app.route('/login/colaborador')
 def login_colaborador():
     return render_template('plataforma/login_colaborador.html')
@@ -101,6 +105,63 @@ def api_login():
                 return jsonify({"success": True, "redirect": "/plataforma/dashboard"})
                 
         return jsonify({"success": False, "error": "Email ou senha incorretos"}), 401
+    except Exception as e:
+        return jsonify({"success": False, "error": str(e)}), 500
+
+@app.route('/api/cadastro', methods=['POST'])
+def api_cadastro():
+    try:
+        data = request.json
+        nome = data.get('nome')
+        sobrenome = data.get('sobrenome')
+        email = data.get('email')
+        cpf = data.get('cpf')
+        senha = data.get('senha')
+        
+        # Validação básica
+        if not all([nome, sobrenome, email, cpf, senha]):
+            return jsonify({"success": False, "error": "Todos os campos são obrigatórios"}), 400
+        
+        # Hash da senha
+        salt = secrets.token_hex(8)
+        hash_senha = hashlib.sha256((senha + salt).encode()).hexdigest()
+        senha_hash = f"{salt}${hash_senha}"
+        
+        conn = sqlite3.connect('guia.db')
+        cursor = conn.cursor()
+        
+        # Verifica se email já existe
+        cursor.execute('SELECT id FROM usuarios_sistema WHERE email = ?', (email,))
+        if cursor.fetchone():
+            conn.close()
+            return jsonify({"success": False, "error": "Email já cadastrado"}), 400
+        
+        # Verifica se CPF já existe
+        cursor.execute('SELECT id FROM usuarios_sistema WHERE cpf = ?', (cpf,))
+        if cursor.fetchone():
+            conn.close()
+            return jsonify({"success": False, "error": "CPF já cadastrado"}), 400
+        
+        # Insere novo usuário
+        cursor.execute('''
+            INSERT INTO usuarios_sistema (nome, email, cpf, senha_hash, role, ativo)
+            VALUES (?, ?, ?, ?, 'admin', 1)
+        ''', (f"{nome} {sobrenome}", email, cpf, senha_hash))
+        
+        conn.commit()
+        usuario_id = cursor.lastrowid
+        conn.close()
+        
+        # login automático
+        session['user_id'] = usuario_id
+        session['nome'] = f"{nome} {sobrenome}"
+        session['role'] = 'admin'
+        
+        return jsonify({
+            "success": True, 
+            "redirect": "/plataforma/dashboard"
+        }), 201
+        
     except Exception as e:
         return jsonify({"success": False, "error": str(e)}), 500
 
