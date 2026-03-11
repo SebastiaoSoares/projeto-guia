@@ -4,11 +4,12 @@ import sqlite3
 import secrets
 from functools import wraps
 
+# Importações atualizadas para suportar o modelo SaaS
 from models.models import (
-    init_db, get_all_tasks, create_colaborador_com_card_e_tarefas,
+    init_db, get_db_connection, get_all_tasks, create_colaborador_com_card_e_tarefas,
     update_task_status, delete_task, get_dashboard_stats,
     get_onboarding_data_by_token, get_card_com_tarefas_e_colaborador,
-    update_tarefa_status, get_all_colunas_com_setores, verify_token,
+    update_tarefa_status, get_colunas_by_empresa,
     get_colaborador_by_token, add_anotacao_criptografada
 )
 
@@ -25,6 +26,14 @@ def login_required(f):
         return f(*args, **kwargs)
     return decorated_function
 
+def api_login_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if 'user_id' not in session or 'empresa_id' not in session:
+            return jsonify({"error": "Não autorizado ou sessão expirada"}), 401
+        return f(*args, **kwargs)
+    return decorated_function
+
 @app.route('/')
 def index():
     return render_template('index.html')
@@ -34,6 +43,7 @@ def login():
     return render_template('plataforma/login.html')
 
 @app.route('/cadastro')
+@login_required # Apenas um gestor logado pode aceder à página para cadastrar outro
 def cadastro():
     return render_template('plataforma/cadastro.html')
 
@@ -69,6 +79,8 @@ def onboarding():
     session['user_id'] = colaborador['id']
     session['role'] = 'colaborador'
     session['token'] = token
+    # Para o colaborador, não precisamos armazenar empresa_id na sessão, 
+    # pois o token único é suficiente para buscar todos os dados com segurança.
     
     return render_template('plataforma/onboarding.html', token=token)
 
@@ -79,12 +91,12 @@ def api_login():
         email = data.get('email')
         senha = data.get('senha')
         
-        conn = sqlite3.connect('guia.db')
+        conn = get_db_connection()
         cursor = conn.cursor()
         
-        # Busca o usuário no banco de dados
+        # Busca o utilizador e a empresa à qual pertence
         cursor.execute('''
-            SELECT id, nome, senha_hash, role, setor_id 
+            SELECT id, empresa_id, nome, senha_hash, role, setor_id 
             FROM usuarios_sistema 
             WHERE email = ? AND ativo = 1
         ''', (email,))
@@ -93,15 +105,16 @@ def api_login():
         conn.close()
         
         if usuario:
-            hash_completo = usuario[2]
+            hash_completo = usuario['senha_hash']
             salt, hash_real = hash_completo.split('$')
             hash_verificar = hashlib.sha256((senha + salt).encode()).hexdigest()
             
             if hash_verificar == hash_real:
-                session['user_id'] = usuario[0]
-                session['nome'] = usuario[1]
-                session['role'] = usuario[3]
-                session['setor_id'] = usuario[4]
+                session['user_id'] = usuario['id']
+                session['empresa_id'] = usuario['empresa_id']
+                session['nome'] = usuario['nome']
+                session['role'] = usuario['role']
+                session['setor_id'] = usuario['setor_id']
                 return jsonify({"success": True, "redirect": "/plataforma/dashboard"})
                 
         return jsonify({"success": False, "error": "Email ou senha incorretos"}), 401
@@ -109,53 +122,43 @@ def api_login():
         return jsonify({"success": False, "error": str(e)}), 500
 
 @app.route('/api/cadastro', methods=['POST'])
+@api_login_required
 def api_cadastro():
+    """Cadastra um novo gestor/membro do RH na MESMA empresa de quem está logado"""
     try:
         data = request.json
         nome = data.get('nome')
         sobrenome = data.get('sobrenome')
         email = data.get('email')
-        cpf = data.get('cpf')
         senha = data.get('senha')
         
-        # Validação básica
-        if not all([nome, sobrenome, email, cpf, senha]):
+        # Herdamos o empresa_id do utilizador logado
+        empresa_id = session.get('empresa_id')
+        
+        if not all([nome, sobrenome, email, senha]):
             return jsonify({"success": False, "error": "Todos os campos são obrigatórios"}), 400
         
-        # Hash da senha
         salt = secrets.token_hex(8)
         hash_senha = hashlib.sha256((senha + salt).encode()).hexdigest()
         senha_hash = f"{salt}${hash_senha}"
         
-        conn = sqlite3.connect('guia.db')
+        conn = get_db_connection()
         cursor = conn.cursor()
         
-        # Verifica se email já existe
+        # Verifica se email já existe no sistema globalmente
         cursor.execute('SELECT id FROM usuarios_sistema WHERE email = ?', (email,))
         if cursor.fetchone():
             conn.close()
             return jsonify({"success": False, "error": "Email já cadastrado"}), 400
         
-        # Verifica se CPF já existe
-        cursor.execute('SELECT id FROM usuarios_sistema WHERE cpf = ?', (cpf,))
-        if cursor.fetchone():
-            conn.close()
-            return jsonify({"success": False, "error": "CPF já cadastrado"}), 400
-        
-        # Insere novo usuário
+        # Insere novo gestor para a mesma empresa
         cursor.execute('''
-            INSERT INTO usuarios_sistema (nome, email, cpf, senha_hash, role, ativo)
+            INSERT INTO usuarios_sistema (empresa_id, nome, email, senha_hash, role, ativo)
             VALUES (?, ?, ?, ?, 'admin', 1)
-        ''', (f"{nome} {sobrenome}", email, cpf, senha_hash))
+        ''', (empresa_id, f"{nome} {sobrenome}", email, senha_hash))
         
         conn.commit()
-        usuario_id = cursor.lastrowid
         conn.close()
-        
-        # login automático
-        session['user_id'] = usuario_id
-        session['nome'] = f"{nome} {sobrenome}"
-        session['role'] = 'admin'
         
         return jsonify({
             "success": True, 
@@ -166,20 +169,26 @@ def api_cadastro():
         return jsonify({"success": False, "error": str(e)}), 500
 
 @app.route('/api/colunas', methods=['GET'])
+@api_login_required
 def api_get_colunas():
-    colunas = get_all_colunas_com_setores()
+    empresa_id = session.get('empresa_id')
+    colunas = get_colunas_by_empresa(empresa_id)
     return jsonify(colunas)
 
 @app.route('/api/tasks', methods=['GET'])
+@api_login_required
 def api_get_tasks():
-    tasks = get_all_tasks()
+    empresa_id = session.get('empresa_id')
+    tasks = get_all_tasks(empresa_id)
     return jsonify(tasks)
 
 @app.route('/api/tasks', methods=['POST'])
+@api_login_required
 def api_create_task():
     try:
+        empresa_id = session.get('empresa_id')
         data = request.json
-        result = create_colaborador_com_card_e_tarefas(data)
+        result = create_colaborador_com_card_e_tarefas(empresa_id, data)
         
         if result and result.get('success'):
             return jsonify({
@@ -196,25 +205,35 @@ def api_create_task():
         return jsonify({"success": False, "error": str(e)}), 500
 
 @app.route('/api/cards/<int:card_id>', methods=['GET'])
+@api_login_required
 def api_get_card_detalhes(card_id):
-    card_data = get_card_com_tarefas_e_colaborador(card_id)
+    empresa_id = session.get('empresa_id')
+    card_data = get_card_com_tarefas_e_colaborador(card_id, empresa_id)
     if card_data:
         return jsonify(card_data)
-    return jsonify({"error": "Card não encontrado"}), 404
+    return jsonify({"error": "Card não encontrado ou não pertence a esta empresa"}), 404
 
 @app.route('/api/tasks/<int:task_id>/status', methods=['PATCH'])
+@api_login_required
 def api_update_status(task_id):
+    empresa_id = session.get('empresa_id')
     data = request.json
-    success = update_task_status(task_id, data['coluna_id'])
+    success = update_task_status(task_id, data['coluna_id'], empresa_id)
     return jsonify({"success": success})
 
 @app.route('/api/tasks/<int:task_id>', methods=['DELETE'])
+@api_login_required
 def api_delete_task(task_id):
-    success = delete_task(task_id)
+    empresa_id = session.get('empresa_id')
+    success = delete_task(task_id, empresa_id)
     return jsonify({"success": success})
+
+# --- Rotas Acessíveis ao Colaborador (Baseadas no Token ou Ação Específica) ---
 
 @app.route('/api/tarefas/<int:tarefa_id>', methods=['PATCH'])
 def api_toggle_tarefa(tarefa_id):
+    # Tanto o gestor quanto o colaborador podem alterar o status da tarefa.
+    # O controlo exato de permissões pode ser expandido aqui futuramente.
     data = request.json
     success = update_tarefa_status(tarefa_id, data['concluida'])
     return jsonify({"success": success})
@@ -243,8 +262,10 @@ def api_salvar_anotacao():
     return jsonify({"success": success})
 
 @app.route('/api/dashboard/stats', methods=['GET'])
+@api_login_required
 def api_get_stats():
-    stats = get_dashboard_stats()
+    empresa_id = session.get('empresa_id')
+    stats = get_dashboard_stats(empresa_id)
     return jsonify(stats)
 
 @app.route('/logout')

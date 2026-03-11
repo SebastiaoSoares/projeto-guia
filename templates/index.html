@@ -9,6 +9,20 @@
     <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='assets/favicon.ico') }}">
     <!-- AOS CSS para animações -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" rel="stylesheet">
+    <style>
+        .highlight-saas {
+            display: inline-block;
+            background: rgba(255, 59, 48, 0.1);
+            color: #FF3B30;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+    </style>
 </head>
 <body>
     <!-- Header -->
@@ -21,10 +35,11 @@
                 </div>
                 <nav class="main-nav">
                     <ul>
-                        <li><a href="#how-it-works">Como Funciona</a></li>
-                        <li><a href="#features">Funcionalidades</a></li>
-                        <li><a href="#about">Sobre Nós</a></li>
-                        <li><a href="{{ url_for('login') }}" class="nav-button">Acessar Sistema</a></li>
+                        <li><a href="#how-it-works">A Solução</a></li>
+                        <li><a href="#features">Painel & Guia de Bolso</a></li>
+                        <li><a href="#about">Sobre o Projeto</a></li>
+                        <li><a href="{{ url_for('login') }}" class="nav-button" style="background-color: transparent; color: #333; border: 2px solid #333; margin-right: 10px;">Login Gestor</a></li>
+                        <li><a href="{{ url_for('login_colaborador') }}" class="nav-button">Guia de Bolso</a></li>
                     </ul>
                 </nav>
                 <button class="mobile-menu-btn">
@@ -39,22 +54,24 @@
         <div class="container">
             <div class="hero-content">
                 <div class="hero-text" data-aos="fade-right">
-                    <h1 class="hero-title">Gestão Visual que <span class="highlight">Acelera</span> seu Time</h1>
-                    <p class="hero-subtitle">Criado por aprendizes para empresas que buscam eficiência. Organize tarefas, otimize onboarding e aumente a produtividade com visualização intuitiva.</p>
+                    <span class="highlight-saas">Plataforma SaaS de Onboarding</span>
+                    <h1 class="hero-title">O fim do trabalho em <span class="highlight">silos</span> na sua admissão</h1>
+                    <p class="hero-subtitle">Conecte RH, SESMT, TI e Gestores em um único Kanban. Acompanhe a jornada do novo colaborador e ofereça a ele um "Guia de Bolso" sem burocracias.</p>
                     <div class="hero-buttons">
+                        <a href="{{ url_for('cadastro') }}" class="nav-button" style="padding: 15px 30px; font-size: 1.1rem;">Criar Conta Empresarial</a>
                     </div>
                     <div class="hero-stats">
                         <div class="stat">
-                            <span class="stat-number">+80%</span>
-                            <span class="stat-text">Potencial de Produtividade</span>
-                        </div>
-                        <div class="stat">
-                            <span class="stat-number">-70%</span>
-                            <span class="stat-text">Tempo de Onboarding</span>
-                        </div>
-                        <div class="stat">
                             <span class="stat-number">100%</span>
-                            <span class="stat-text">Visual</span>
+                            <span class="stat-text">Visibilidade entre Setores</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-number">0</span>
+                            <span class="stat-text">Senhas para o Colaborador</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-number">Única</span>
+                            <span class="stat-text">Fonte da Verdade</span>
                         </div>
                     </div>
                 </div>
@@ -62,47 +79,42 @@
                     <div class="dashboard-preview">
                         <div class="preview-header">
                             <div class="preview-tabs">
-                                <span class="tab active">RH</span>
-                                <span class="tab">TI</span>
-                                <span class="tab">Vendas</span>
-                                <span class="tab">Operações</span>
+                                <span class="tab active">Integração Ágil</span>
                             </div>
                             <div class="preview-actions">
-                                <i class="fas fa-plus"></i>
+                                <i class="fas fa-search"></i>
                             </div>
                         </div>
                         <div class="kanban-preview">
                             <div class="kanban-column">
-                                <div class="column-header" style="border-color: #FF3B30;">
-                                    <h3>A Fazer</h3>
-                                    <span class="task-count">3</span>
+                                <div class="column-header" style="border-color: #007AFF;">
+                                    <h3>RH & Documentos</h3>
+                                    <span class="task-count">1</span>
                                 </div>
                                 <div class="task-card">
                                     <div class="task-tags">
-                                        <span class="tag urgent">URGENTE</span>
-                                        <span class="tag onboarding">ONBOARDING</span>
+                                        <span class="tag onboarding" style="background: #E5E5EA; color: #333;">NOVO</span>
                                     </div>
-                                    <h4>Integrar novo colaborador</h4>
-                                    <p>Configurar acessos e treinamento inicial</p>
+                                    <h4>Carlos Eduardo</h4>
+                                    <p>carlos@email.com</p>
                                     <div class="task-footer">
                                         <div class="assignee">
-                                            <div class="avatar">JS</div>
-                                            <span>Joana Silva</span>
+                                            <div class="avatar" style="background: #007AFF;">CE</div>
+                                            <span style="font-size: 0.7rem; font-family: monospace;">Token: a8b4...</span>
                                         </div>
-                                        <span class="deadline">Hoje</span>
                                     </div>
-                                </div>
-                            </div>
-                            <div class="kanban-column">
-                                <div class="column-header" style="border-color: #FF9500;">
-                                    <h3>Em Andamento</h3>
-                                    <span class="task-count">2</span>
                                 </div>
                             </div>
                             <div class="kanban-column">
                                 <div class="column-header" style="border-color: #34C759;">
-                                    <h3>Concluído</h3>
-                                    <span class="task-count">5</span>
+                                    <h3>SESMT (Saúde)</h3>
+                                    <span class="task-count">0</span>
+                                </div>
+                            </div>
+                            <div class="kanban-column">
+                                <div class="column-header" style="border-color: #FF9500;">
+                                    <h3>TI (Acessos)</h3>
+                                    <span class="task-count">0</span>
                                 </div>
                             </div>
                         </div>
@@ -116,80 +128,80 @@
     <section id="how-it-works" class="how-it-works">
         <div class="container">
             <div class="section-header" data-aos="fade-up">
-                <h2>Simples, Visual, Eficiente</h2>
-                <p>Três passos para transformar a gestão da sua empresa</p>
+                <h2>Como a plataforma resolve o seu problema</h2>
+                <p>Acabamos com os e-mails perdidos e planilhas desatualizadas no onboarding</p>
             </div>
             <div class="steps-container">
                 <div class="step" data-aos="fade-right">
-                    <div class="step-number">1</div>
-                    <h3>Crie seus Quadros</h3>
-                    <p>Configure quadros visuais para cada departamento com colunas personalizadas.</p>
+                    <div class="step-number"><i class="fas fa-building"></i></div>
+                    <h3>Setup da Empresa</h3>
+                    <p>O RH cadastra a empresa e cria dinamicamente as colunas (setores) por onde o novo funcionário deve passar.</p>
                 </div>
                 <div class="step-line"></div>
                 <div class="step" data-aos="fade-up">
-                    <div class="step-number">2</div>
-                    <h3>Adicione Tarefas</h3>
-                    <p>Inclua atividades com responsáveis, prazos, prioridades e documentos.</p>
+                    <div class="step-number"><i class="fas fa-handshake"></i></div>
+                    <h3>O Kanban Compartilhado</h3>
+                    <p>O card do colaborador viaja entre as áreas. Cada setor possui seu próprio checklist automático que é instanciado na hora.</p>
                 </div>
                 <div class="step-line"></div>
                 <div class="step" data-aos="fade-left">
-                    <div class="step-number">3</div>
-                    <h3>Acompanhe e Otimize</h3>
-                    <p>Monitore o progresso visualmente e identifique oportunidades de melhoria.</p>
+                    <div class="step-number"><i class="fas fa-mobile-alt"></i></div>
+                    <h3>Guia de Bolso (Token)</h3>
+                    <p>O colaborador recebe um link seguro (Token) e acompanha seu próprio progresso de admissão direto pelo celular.</p>
                 </div>
             </div>
         </div>
     </section>
 
     <!-- Features Section -->
-    <section id="features" class="features-section">
+    <section id="features" class="features-section" style="background-color: #FFF;">
         <div class="container">
             <div class="section-header" data-aos="fade-up">
-                <h2>Potencialize seu Time com Visualização</h2>
-                <p>Desenvolvido por aprendizes apaixonados por resolver problemas reais das empresas</p>
+                <h2>Duas Visões, Um Único Objetivo</h2>
+                <p>Uma interface robusta para a empresa e uma experiência acolhedora para o funcionário</p>
             </div>
             <div class="features-grid">
                 <div class="feature-card" data-aos="zoom-in" data-aos-delay="100">
                     <div class="feature-icon" style="background-color: rgba(255, 59, 48, 0.1);">
                         <i class="fas fa-columns" style="color: #FF3B30;"></i>
                     </div>
-                    <h3>Quadros por Departamento</h3>
-                    <p>Organize tarefas visualmente com quadros personalizáveis para cada setor da empresa.</p>
+                    <h3>Kanban Multi-Tenant</h3>
+                    <p>Ambiente isolado por empresa. O RH tem a visão macro, e os agentes arrastam os cards entre os setores com facilidade.</p>
                 </div>
                 <div class="feature-card" data-aos="zoom-in" data-aos-delay="200">
-                    <div class="feature-icon" style="background-color: rgba(255, 149, 0, 0.1);">
-                        <i class="fas fa-user-friends" style="color: #FF9500;"></i>
+                    <div class="feature-icon" style="background-color: rgba(52, 199, 89, 0.1);">
+                        <i class="fas fa-list-check" style="color: #34C759;"></i>
                     </div>
-                    <h3>Onboarding Visual</h3>
-                    <p>Guie novos colaboradores com checklists interativos e progresso visível.</p>
+                    <h3>Checklists Dinâmicos</h3>
+                    <p>Cada setor configura o que precisa ser feito. Quando o card chega lá, as tarefas do novato são geradas sozinhas.</p>
                 </div>
                 <div class="feature-card" data-aos="zoom-in" data-aos-delay="300">
-                    <div class="feature-icon" style="background-color: rgba(52, 199, 89, 0.1);">
-                        <i class="fas fa-chart-line" style="color: #34C759;"></i>
+                    <div class="feature-icon" style="background-color: rgba(0, 122, 255, 0.1);">
+                        <i class="fas fa-key" style="color: #007AFF;"></i>
                     </div>
-                    <h3>Métricas em Tempo Real</h3>
-                    <p>Acompanhe produtividade e identifique gargalos com dados visuais.</p>
+                    <h3>Acesso Simplificado</h3>
+                    <p>Sem criação de senhas no primeiro dia. O sistema gera um Token hexadecimal criptografado para acesso direto ao Guia.</p>
                 </div>
                 <div class="feature-card" data-aos="zoom-in" data-aos-delay="400">
-                    <div class="feature-icon" style="background-color: rgba(0, 122, 255, 0.1);">
-                        <i class="fas fa-sync-alt" style="color: #007AFF;"></i>
+                    <div class="feature-icon" style="background-color: rgba(255, 149, 0, 0.1);">
+                        <i class="fas fa-user-check" style="color: #FF9500;"></i>
                     </div>
-                    <h3>Atualizações Automáticas</h3>
-                    <p>Notificações em tempo real quando tarefas são movidas ou atualizadas.</p>
+                    <h3>Autonomia do Colaborador</h3>
+                    <p>O novato vê a linha do tempo do seu onboarding e pode dar o "ok" nas tarefas caso um setor esqueça de atualizar o sistema.</p>
                 </div>
                 <div class="feature-card" data-aos="zoom-in" data-aos-delay="500">
-                    <div class="feature-icon" style="background-color: rgba(255, 204, 0, 0.1);">
-                        <i class="fas fa-mobile-alt" style="color: #FFCC00;"></i>
+                    <div class="feature-icon" style="background-color: rgba(175, 82, 222, 0.1);">
+                        <i class="fas fa-sticky-note" style="color: #AF52DE;"></i>
                     </div>
-                    <h3>Totalmente Responsivo</h3>
-                    <p>Acesse de qualquer dispositivo com interface intuitiva e arrastar-e-soltar.</p>
+                    <h3>Anotações Seguras</h3>
+                    <p>Uma área privada no Guia de Bolso para o colaborador guardar ramais, e-mails provisórios e dicas de integração.</p>
                 </div>
                 <div class="feature-card" data-aos="zoom-in" data-aos-delay="600">
-                    <div class="feature-icon" style="background-color: rgba(175, 82, 222, 0.1);">
-                        <i class="fas fa-shield-alt" style="color: #AF52DE;"></i>
+                    <div class="feature-icon" style="background-color: rgba(90, 200, 250, 0.1);">
+                        <i class="fas fa-database" style="color: #5AC8FA;"></i>
                     </div>
-                    <h3>Segurança Empresarial</h3>
-                    <p>Controle de acesso por níveis e backup automático dos dados.</p>
+                    <h3>Segurança de Dados</h3>
+                    <p>Arquitetura Multi-Tenant com Flask e senhas hasheadas via SHA-256 e salts exclusivos. Seus dados nunca se misturam.</p>
                 </div>
             </div>
         </div>
@@ -201,8 +213,8 @@
             <div class="about-content">
                 <div class="about-text" data-aos="fade-right">
                     <h2>Nascido na sala de aula, <span class="highlight">desenvolvido para o mercado</span></h2>
-                    <p>O GUIA surgiu da identificação de uma dor real do mercado corporativo: a desorganização nos processos de admissão. Quando RH, TI e Gestores não se comunicam, o novo colaborador é quem sofre.</p>
-                    <p>O conceito, a regra de negócio e toda a identidade deste projeto foram idealizados e desenvolvidos de forma colaborativa.</p>
+                    <p>O GUIA surgiu da identificação de uma dor real do mercado corporativo: a desorganização nos processos de admissão. Quando RH, TI, SESMT e Gestores não se comunicam, o novo colaborador é quem sofre.</p>
+                    <p>O conceito, a regra de negócio (Kanban + Guia de Bolso) e a arquitetura SaaS deste projeto foram idealizados para resolver de vez os "silos departamentais".</p>
                     
                     <div class="team-highlight">
                         <i class="fas fa-graduation-cap"></i>
@@ -210,7 +222,7 @@
                             <p style="margin-bottom: 5px;"><strong>Projeto Final Integrador</strong></p>
                             <p style="font-size: 0.9rem; margin-bottom: 12px;">
                                 Desenvolvido pela turma de Aprendizagem Comercial <strong>2025-09-75</strong> (SENAC-CE, polo Crato), orientados por <strong>Suzana Oliveira</strong>. A fundamentação e os dados do projeto estão em nosso 
-                                <a href="#" target="_blank" style="color: var(--primary-red); text-decoration: underline; font-weight: 600;">documento geral de pesquisa</a>.
+                                <a href="#" target="_blank" style="color: var(--primary-red); text-decoration: underline; font-weight: 600;">documento de pesquisa e proposta</a>.
                             </p>
                             <a href="https://github.com/sebastiaosoares/projeto-guia" target="_blank" class="btn btn-outline" style="padding: 6px 12px; font-size: 0.85rem; border-width: 1px;">
                                 <i class="fab fa-github"></i> Código Aberto (Devs: Sebastião, Suyane e Renan)
@@ -249,23 +261,16 @@
                     <div class="link-group">
                         <h4>Acessos Rápidos</h4>
                         <a href="/">Página Inicial</a>
-                        <a href="{{ url_for('plataforma') }}">Dashboard (Kanban)</a>
-                        <a href="{{ url_for('login') }}">Login</a>
-                        <a href="{{ url_for('cadastro') }}">Cadastro</a>
+                        <a href="{{ url_for('plataforma') }}">Dashboard (RH)</a>
+                        <a href="{{ url_for('login_colaborador') }}">Guia de Bolso</a>
+                        <a href="{{ url_for('cadastro') }}">Cadastrar Empresa</a>
                     </div>
                     <div class="link-group">
                         <h4>Projeto</h4>
-                        <a href="#features">A Solução</a>
-                        <a href="#how-it-works">Metodologia</a>
+                        <a href="#how-it-works">A Solução SaaS</a>
+                        <a href="#features">Funcionalidades</a>
                         <a href="#about">Turma SENAC</a>
-                        <a href="#" target="_blank">Documento de Pesquisa</a>
-                    </div>
-                    <div class="link-group">
-                        <h4>Legal</h4>
-                        <a href="#">Privacidade</a>
-                        <a href="#">Termos</a>
-                        <a href="#">Segurança</a>
-                        <a href="#">Cookies</a>
+                        <a href="#" target="_blank">Proposta de Valor</a>
                     </div>
                 </div>
             </div>
