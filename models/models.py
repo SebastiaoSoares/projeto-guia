@@ -24,6 +24,8 @@ class Gestor(db.Model):
     nome = db.Column(db.String(100), nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
     senha_hash = db.Column(db.String(255), nullable=False)
+    is_rh = db.Column(db.Boolean, default=True)
+    setor = db.Column(db.String(100), nullable=True)
 
 class Coluna(db.Model):
     __tablename__ = 'colunas'

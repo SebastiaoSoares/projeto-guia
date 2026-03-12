@@ -49,7 +49,9 @@ def setup_empresa(nome_empresa, nome_gestor, email_gestor, senha_gestor):
                 empresa_id=nova_empresa.id,
                 nome=nome_gestor,
                 email=email_gestor,
-                senha_hash=senha_hash
+                senha_hash=senha_hash,
+                is_rh=True,
+                setor='RH'
             )
             db.session.add(novo_gestor)
             

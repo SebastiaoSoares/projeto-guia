@@ -1,6 +1,6 @@
 import os
 from flask import Flask, render_template, request, redirect, url_for, session, jsonify, flash
-from werkzeug.security import check_password_hash
+from werkzeug.security import check_password_hash, generate_password_hash
 from functools import wraps
 from models.models import db, Empresa, Gestor, Colaborador, Coluna, Task, ChecklistPadrao, LogAtividade
 
@@ -39,6 +39,14 @@ def gestor_required(f):
         return f(*args, **kwargs)
     return decorated_function
 
+def rh_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if not session.get('is_rh'):
+            return jsonify({'erro': 'Acesso negado. Permissão exclusiva do RH.'}), 403
+        return f(*args, **kwargs)
+    return decorated_function
+
 # --- ROTAS DE AUTENTICAÇÃO ---
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -52,6 +60,8 @@ def login():
             session['empresa_id'] = gestor.empresa_id
             session['nome'] = gestor.nome
             session['tipo_usuario'] = 'gestor'
+            session['is_rh'] = gestor.is_rh
+            session['setor'] = gestor.setor
             return redirect(url_for('dashboard'))
             
         flash('E-mail ou senha inválidos', 'danger')
@@ -93,7 +103,12 @@ def cadastro():
 @login_required
 @gestor_required
 def dashboard():
-    return render_template('plataforma/dashboard.html', nome_gestor=session.get('nome'))
+    empresa = Empresa.query.get(session.get('empresa_id'))
+    return render_template('plataforma/dashboard.html', 
+                           nome_gestor=session.get('nome'),
+                           is_rh=session.get('is_rh'),
+                           setor_gestor=session.get('setor'),
+                           nome_empresa=empresa.nome if empresa else 'Empresa')
 
 @app.route('/onboarding')
 def onboarding():
@@ -102,17 +117,68 @@ def onboarding():
     return render_template('plataforma/onboarding.html', nome_colaborador=session.get('nome'))
 
 # --- API ENDPOINTS (DASHBOARD GESTOR) ---
-@app.route('/api/colunas', methods=['GET'])
+@app.route('/api/colunas', methods=['GET', 'POST'])
 @login_required
-def listar_colunas():
+def gerenciar_colunas():
     empresa_id = session.get('empresa_id')
-    colunas = Coluna.query.filter_by(empresa_id=empresa_id).order_by(Coluna.ordem).all()
-    return jsonify([{
-        'id': c.id,
-        'nome': c.nome,
-        'cor_hex': c.cor_hex,
-        'ordem': c.ordem
-    } for c in colunas])
+    
+    if request.method == 'GET':
+        colunas = Coluna.query.filter_by(empresa_id=empresa_id).order_by(Coluna.ordem).all()
+        return jsonify([{
+            'id': c.id,
+            'nome': c.nome,
+            'cor_hex': c.cor_hex,
+            'ordem': c.ordem
+        } for c in colunas])
+        
+    if request.method == 'POST':
+        if not session.get('is_rh'):
+            return jsonify({'erro': 'Acesso negado. Apenas RH.'}), 403
+            
+        dados = request.json
+        # Pega a última ordem para colocar a nova coluna no final
+        max_ordem = db.session.query(db.func.max(Coluna.ordem)).filter_by(empresa_id=empresa_id).scalar() or 0
+        
+        nova_coluna = Coluna(
+            empresa_id=empresa_id,
+            nome=dados['nome'],
+            cor_hex=dados.get('cor_hex', '#808080'),
+            ordem=max_ordem + 1
+        )
+        db.session.add(nova_coluna)
+        db.session.commit()
+        return jsonify({'mensagem': 'Coluna criada', 'id': nova_coluna.id}), 201
+
+@app.route('/api/colunas/<int:coluna_id>', methods=['PUT', 'DELETE'])
+@login_required
+@rh_required
+def editar_excluir_coluna(coluna_id):
+    empresa_id = session.get('empresa_id')
+    coluna = Coluna.query.filter_by(id=coluna_id, empresa_id=empresa_id).first()
+    
+    if not coluna:
+        return jsonify({'erro': 'Coluna não encontrada'}), 404
+        
+    if request.method == 'DELETE':
+        # Trava de Segurança: Verifica se tem algum colaborador nesta coluna
+        qtd_colaboradores = Colaborador.query.filter_by(coluna_id=coluna.id).count()
+        if qtd_colaboradores > 0:
+            return jsonify({'erro': 'Não é possível excluir uma fase que possui colaboradores. Mova-os para outra fase primeiro.'}), 400
+            
+        ChecklistPadrao.query.filter_by(coluna_id=coluna.id).delete()
+        Task.query.filter_by(coluna_id=coluna.id).delete()
+        db.session.delete(coluna)
+        db.session.commit()
+        return jsonify({'mensagem': 'Coluna excluída com sucesso'})
+        
+    if request.method == 'PUT':
+        dados = request.json
+        if 'nome' in dados:
+            coluna.nome = dados['nome']
+        if 'cor_hex' in dados:
+            coluna.cor_hex = dados['cor_hex']
+        db.session.commit()
+        return jsonify({'mensagem': 'Coluna atualizada'})
 
 @app.route('/api/colunas/<int:coluna_id>/checklists', methods=['GET', 'POST'])
 @login_required
@@ -132,7 +198,11 @@ def gerenciar_checklists_coluna(coluna_id):
             'descricao': c.descricao
         } for c in checklists])
         
+    # Protege a criação de checklists apenas para RH
     if request.method == 'POST':
+        if not session.get('is_rh'):
+            return jsonify({'erro': 'Acesso negado. Apenas RH.'}), 403
+            
         dados = request.json
         if not dados or not dados.get('titulo'):
             return jsonify({'erro': 'Título é obrigatório'}), 400
@@ -147,19 +217,29 @@ def gerenciar_checklists_coluna(coluna_id):
         db.session.commit()
         return jsonify({'mensagem': 'Tarefa padrão criada com sucesso', 'id': novo_checklist.id}), 201
 
-@app.route('/api/checklists/<int:checklist_id>', methods=['DELETE'])
+@app.route('/api/checklists/<int:checklist_id>', methods=['PUT', 'DELETE'])
 @login_required
-@gestor_required
-def deletar_checklist_padrao(checklist_id):
+@rh_required
+def editar_deletar_checklist_padrao(checklist_id):
     empresa_id = session.get('empresa_id')
     checklist = ChecklistPadrao.query.filter_by(id=checklist_id, empresa_id=empresa_id).first()
     
     if not checklist:
         return jsonify({'erro': 'Tarefa padrão não encontrada'}), 404
         
-    db.session.delete(checklist)
-    db.session.commit()
-    return jsonify({'mensagem': 'Tarefa padrão removida com sucesso'}), 200
+    if request.method == 'DELETE':
+        db.session.delete(checklist)
+        db.session.commit()
+        return jsonify({'mensagem': 'Tarefa padrão removida com sucesso'}), 200
+        
+    if request.method == 'PUT':
+        dados = request.json
+        if 'titulo' in dados:
+            checklist.titulo = dados['titulo']
+        if 'descricao' in dados:
+            checklist.descricao = dados['descricao']
+        db.session.commit()
+        return jsonify({'mensagem': 'Tarefa padrão atualizada com sucesso'})
 
 @app.route('/api/colaboradores', methods=['GET', 'POST'])
 @login_required
@@ -179,6 +259,9 @@ def gerenciar_colaboradores():
         } for c in colaboradores])
         
     if request.method == 'POST':
+        if not session.get('is_rh'):
+            return jsonify({'erro': 'Acesso negado. Apenas RH pode cadastrar colaboradores.'}), 403
+
         dados = request.json
         primeira_coluna = Coluna.query.filter_by(empresa_id=empresa_id).order_by(Coluna.ordem).first()
         
@@ -219,6 +302,89 @@ def mover_card():
     _instanciar_tarefas_coluna_internal(colaborador.id, nova_coluna_id, empresa_id)
     
     return jsonify({'mensagem': 'Card movido com sucesso'})
+
+@app.route('/api/colaboradores/<int:colab_id>/detalhes', methods=['GET'])
+@login_required
+@gestor_required
+def detalhes_colaborador(colab_id):
+    empresa_id = session.get('empresa_id')
+    colaborador = Colaborador.query.filter_by(id=colab_id, empresa_id=empresa_id).first()
+    
+    if not colaborador:
+        return jsonify({'erro': 'Colaborador não encontrado'}), 404
+
+    # Busca as tarefas APENAS da coluna atual em que o colaborador está
+    tarefas = Task.query.filter_by(colaborador_id=colaborador.id, coluna_id=colaborador.coluna_id).all()
+
+    return jsonify({
+        'id': colaborador.id,
+        'nome': colaborador.nome,
+        'cargo': colaborador.cargo,
+        'departamento': colaborador.departamento,
+        'email': colaborador.email,
+        'telefone': colaborador.telefone,
+        'token': colaborador.token_acesso,
+        'tarefas': [{
+            'id': t.id,
+            'titulo': t.titulo,
+            'descricao': t.descricao,
+            'status': t.status
+        } for t in tarefas]
+    })
+
+@app.route('/api/gestor/tarefas/<int:task_id>', methods=['POST'])
+@login_required
+@gestor_required
+def gestor_atualizar_tarefa(task_id):
+    empresa_id = session.get('empresa_id')
+    
+    # Verifica se a tarefa pertence a um colaborador da empresa do gestor (segurança)
+    task = Task.query.join(Colaborador).filter(
+        Task.id == task_id,
+        Colaborador.empresa_id == empresa_id
+    ).first()
+
+    if not task:
+        return jsonify({'erro': 'Tarefa não encontrada'}), 404
+
+    dados = request.json
+    task.status = dados.get('status', task.status)
+    db.session.commit()
+    return jsonify({'mensagem': 'Tarefa atualizada com sucesso'})
+
+# --- NOVAS ROTAS DE EQUIPE (GESTORES) ---
+@app.route('/api/equipe', methods=['GET', 'POST'])
+@login_required
+@rh_required
+def gerenciar_equipe():
+    empresa_id = session.get('empresa_id')
+    
+    if request.method == 'GET':
+        equipe = Gestor.query.filter_by(empresa_id=empresa_id).all()
+        return jsonify([{
+            'id': g.id,
+            'nome': g.nome,
+            'email': g.email,
+            'is_rh': g.is_rh,
+            'setor': g.setor
+        } for g in equipe])
+        
+    if request.method == 'POST':
+        dados = request.json
+        if Gestor.query.filter_by(email=dados['email']).first():
+            return jsonify({'erro': 'E-mail já cadastrado.'}), 400
+            
+        novo_membro = Gestor(
+            empresa_id=empresa_id,
+            nome=dados['nome'],
+            email=dados['email'],
+            senha_hash=generate_password_hash(dados['senha']),
+            is_rh=dados['is_rh'],
+            setor=dados.get('setor', 'RH') if dados['is_rh'] else dados.get('setor')
+        )
+        db.session.add(novo_membro)
+        db.session.commit()
+        return jsonify({'mensagem': 'Membro da equipe adicionado com sucesso', 'id': novo_membro.id}), 201
 
 def _instanciar_tarefas_coluna_internal(colaborador_id, coluna_id, empresa_id):
     checklists = ChecklistPadrao.query.filter_by(coluna_id=coluna_id, empresa_id=empresa_id).all()
