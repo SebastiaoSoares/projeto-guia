@@ -38,12 +38,15 @@
     box-sizing: border-box;
 }
 
+html, body {
+    overflow-x: hidden;
+}
+
 body {
     font-family: 'Poppins', 'Segoe UI', system-ui, -apple-system, sans-serif;
     color: var(--dark);
     background-color: var(--bg-main);
     line-height: 1.6;
-    overflow-x: hidden;
 }
 
 .container {
@@ -77,11 +80,18 @@ h3 {
 
 p {
     margin-bottom: 1rem;
-    color: var(--gray-dark);
 }
 
 .highlight {
     color: var(--primary);
+}
+
+#aviso-painel-gestor {
+    display: none;
+    color: var(--gray-light);
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-align: center;
 }
 
 /* Botões */
@@ -692,7 +702,7 @@ p {
     justify-content: space-between;
     align-items: center;
     padding-top: 40px;
-    border-top: 1px solid var(--gray-dark);
+    border-top: 1px solid var(--gray-light);
     color: var(--gray-light);
     font-size: 0.875rem;
 }
@@ -741,6 +751,14 @@ p {
 @media (max-width: 768px) {
     .main-nav ul {
         display: none;
+    }
+
+    #login-gestor {
+        display: none;
+    }
+
+    #aviso-painel-gestor {
+        display: block;
     }
     
     .mobile-menu-btn {

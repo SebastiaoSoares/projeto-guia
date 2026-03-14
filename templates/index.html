@@ -37,8 +37,9 @@
                         <li><a href="#how-it-works">A Solução</a></li>
                         <li><a href="#features">Painel & Guia de Bolso</a></li>
                         <li><a href="#about">Sobre o Projeto</a></li>
-                        <li><a href="{{ url_for('login') }}" class="nav-button">Login Gestor</a></li>
+                        <li id="login-gestor"><a href="{{ url_for('login') }}" class="nav-button">Login Gestor</a></li>
                         <li><a href="{{ url_for('login_colaborador') }}" class="nav-button">Guia de Bolso</a></li>
+                        <li id="aviso-painel-gestor">Acesso por um dispositivo maior para ver também o painel da gestão.</li>
                     </ul>
                 </nav>
                 <button class="mobile-menu-btn">
@@ -221,7 +222,7 @@
                             <p style="margin-bottom: 5px;"><strong>Projeto Final Integrador</strong></p>
                             <p style="font-size: 0.9rem; margin-bottom: 12px;">
                                 Desenvolvido pela turma de Aprendizagem Comercial <strong>2025-09-75</strong> (SENAC-CE, polo Crato), orientados por <strong>Suzana Oliveira</strong>. A fundamentação e os dados do projeto estão em nosso 
-                                <a href="#" target="_blank" style="color: var(--primary); text-decoration: underline; font-weight: 600;">documento de pesquisa e proposta</a>.
+                                <a href="{{ url_for('documentacao') }}" target="_blank" style="color: var(--primary); text-decoration: underline; font-weight: 600;">documento de pesquisa e proposta</a>.
                             </p>
                             <a href="https://github.com/sebastiaosoares/projeto-guia" target="_blank" class="btn btn-outline" style="padding: 6px 12px; font-size: 0.85rem; border-width: 1px;">
                                 <i class="fab fa-github"></i> Código Aberto (Devs: Sebastião, Suyane e Renan)
@@ -242,8 +243,7 @@
             <div class="footer-content">
                 <div class="footer-brand">
                     <div class="logo">
-                        <i class="fas fa-rocket rocket-icon"></i>
-                        <span class="logo-text" style="color: white;">GUIA</span>
+                        <img src="{{ url_for('static', filename='images/image_branco.png') }}" alt="Logo do GUIA" class="logo-image" height="60">
                     </div>
                     <p class="footer-tagline">Gestão Unificada de Integração e Acolhimento.</p>
                     <p style="color: var(--gray-light); font-size: 0.85rem; margin-top: 10px;">
@@ -264,6 +264,10 @@
                         <a href="#features">Funcionalidades</a>
                         <a href="#about">Turma SENAC</a>
                         <a href="#" target="_blank">Proposta de Valor</a>
+                    </div>
+                    <div class="link-group">
+                        <h4>Documentação</h4>
+                        <a href="{{ url_for('documentacao') }}">Fundamentação Teórica</a>
                     </div>
                 </div>
             </div>

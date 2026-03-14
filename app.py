@@ -93,6 +93,10 @@ def login_colaborador():
 def index():
     return render_template('index.html')
 
+@app.route('/documentacao')
+def documentacao():
+    return render_template('documentacao.html')
+
 @app.route('/cadastro')
 def cadastro():
     # Como o cadastro é via CLI (regra de negócio), não temos página pública.
