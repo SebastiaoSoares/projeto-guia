@@ -10,7 +10,7 @@
     
     <style>
         body { 
-            background: #F5F7FA; 
+            background: #f8f7f4; /* Fundo oficial da marca */
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; 
             margin: 0;
             padding: 0;
@@ -18,7 +18,7 @@
         }
         
         .mobile-header { 
-            background: #FF3B30; 
+            background: #fc9003; /* Laranja da marca */
             color: white; 
             padding: 25px 20px; 
             display: flex; 
@@ -26,7 +26,7 @@
             align-items: center; 
             border-bottom-left-radius: 25px; 
             border-bottom-right-radius: 25px; 
-            box-shadow: 0 4px 15px rgba(255,59,48,0.2); 
+            box-shadow: 0 4px 15px rgba(252, 144, 3, 0.2); /* Sombra Laranja */
             position: sticky;
             top: 0;
             z-index: 100;
@@ -50,9 +50,11 @@
         .logout-btn:hover { background: rgba(255,255,255,0.3); }
         
         .welcome-section { padding: 30px 20px 15px; }
-        .welcome-section h2 { font-size: 1.6rem; color: #333; margin-bottom: 8px; font-weight: 700; }
+        .welcome-section h2 { font-size: 1.6rem; color: #2e4365; margin-bottom: 8px; font-weight: 700; } /* Título em Azul Escuro */
         .welcome-section p { color: #666; font-size: 1rem; line-height: 1.5; margin: 0; }
-        .status-badge { display: inline-block; background: #E0F2FE; color: #0284C7; font-size: 0.8rem; padding: 4px 10px; border-radius: 12px; font-weight: 600; margin-top: 10px; }
+        
+        /* Tag de Em andamento usando o Laranja e Creme */
+        .status-badge { display: inline-block; background: rgba(252, 144, 3, 0.1); color: #fc9003; font-size: 0.8rem; padding: 4px 10px; border-radius: 12px; font-weight: 600; margin-top: 10px; }
         
         .tasks-wrapper { padding: 0 20px; }
         
@@ -61,12 +63,12 @@
             border-radius: 16px; 
             padding: 20px; 
             margin-bottom: 15px; 
-            box-shadow: 0 4px 10px rgba(0,0,0,0.03); 
+            box-shadow: 0 4px 10px rgba(46, 67, 101, 0.05); /* Sombra suave com Azul Escuro */
             display: flex; 
             align-items: flex-start; 
             gap: 15px; 
             transition: all 0.3s ease; 
-            border: 1px solid #F0F0F0;
+            border: 1px solid #EAEAEA;
             position: relative;
         }
         
@@ -80,10 +82,11 @@
         
         .checkbox-wrapper { padding-top: 2px; }
         
+        /* Checkbox reestilizado para Azul Escuro para passar elegância e confiança */
         .custom-checkbox { 
             width: 26px; 
             height: 26px; 
-            border: 2px solid #FF3B30; 
+            border: 2px solid #2e4365; 
             border-radius: 8px; 
             display: flex; 
             align-items: center; 
@@ -94,7 +97,7 @@
         }
         
         .custom-checkbox:active { transform: scale(0.9); }
-        .custom-checkbox.checked { background: #FF3B30; border-color: #FF3B30; }
+        .custom-checkbox.checked { background: #2e4365; border-color: #2e4365; }
         .custom-checkbox i { color: white; font-size: 14px; opacity: 0; transform: scale(0.5); transition: all 0.2s; }
         .custom-checkbox.checked i { opacity: 1; transform: scale(1); }
         
@@ -102,18 +105,20 @@
         .task-text h3 { margin: 0 0 6px 0; font-size: 1.05rem; color: #333; line-height: 1.3; font-weight: 600; }
         .task-text p { margin: 0 0 8px 0; font-size: 0.9rem; color: #777; line-height: 1.5; }
         
-        /* Nova tag visual de Dica */
-        .task-hint { font-size: 0.75rem; color: #999; display: flex; align-items: center; gap: 5px; background: #F8F9FA; padding: 4px 8px; border-radius: 6px; width: fit-content; }
+        /* Tag visual de Dica puxando um pouco pro Creme */
+        .task-hint { font-size: 0.75rem; color: #999; display: flex; align-items: center; gap: 5px; background: #FAFAFA; padding: 4px 8px; border-radius: 6px; width: fit-content; border: 1px solid rgba(251, 222, 149, 0.3); }
         
-        .empty-state { text-align: center; padding: 50px 20px; background: white; border-radius: 20px; box-shadow: 0 4px 10px rgba(0,0,0,0.03); }
-        .empty-state i { font-size: 4rem; margin-bottom: 20px; color: #34C759; }
+        .empty-state { text-align: center; padding: 50px 20px; background: white; border-radius: 20px; box-shadow: 0 4px 10px rgba(46, 67, 101, 0.05); }
+        .empty-state i { font-size: 4rem; margin-bottom: 20px; color: #2e4365; } /* Ícone em Azul Escuro */
         .empty-state h3 { color: #333; margin-bottom: 10px; font-size: 1.3rem; }
         .empty-state p { color: #666; line-height: 1.5; font-size: 0.95rem; }
     </style>
 </head>
 <body>
     <header class="mobile-header">
-        <h1><i class="fas fa-compass"></i> Guia de Bolso</h1>
+        <div class="logo">
+            <img src="{{ url_for('static', filename='images/image_branco.png') }}" alt="Logo do GUIA" class="logo-image" height="60">
+        </div>
         <a href="{{ url_for('logout') }}" class="logout-btn" title="Sair"><i class="fas fa-power-off"></i></a>
     </header>
 
@@ -126,7 +131,7 @@
     <!-- Lista de tarefas injetada pelo JavaScript -->
     <div class="tasks-wrapper" id="tasksContainer">
         <div style="text-align: center; color: #999; padding: 40px;">
-            <i class="fas fa-spinner fa-spin" style="font-size: 2.5rem; margin-bottom: 15px; color: #FF3B30;"></i>
+            <i class="fas fa-spinner fa-spin" style="font-size: 2.5rem; margin-bottom: 15px; color: #fc9003;"></i>
             <p>Buscando status do seu processo...</p>
         </div>
     </div>
@@ -149,7 +154,7 @@
                 if (tarefas.length === 0) {
                     container.innerHTML = `
                         <div class="empty-state">
-                            <i class="fas fa-check-circle"></i>
+                            <i class="fas fa-check-circle" style="color: #2e4365;"></i>
                             <h3>Tudo Certo por Aqui!</h3>
                             <p>Não há etapas pendentes para você nesta fase atual do processo. Aguarde o avanço para a próxima etapa.</p>
                         </div>
@@ -187,11 +192,11 @@
                 
             } catch (error) {
                 container.innerHTML = `
-                    <div style="text-align: center; color: #FF3B30; padding: 30px; background: white; border-radius: 16px;">
+                    <div style="text-align: center; color: #fc9003; padding: 30px; background: white; border-radius: 16px;">
                         <i class="fas fa-exclamation-triangle" style="font-size: 3rem; margin-bottom: 15px;"></i>
-                        <h3>Ops! Algo deu errado.</h3>
+                        <h3 style="color: #2e4365;">Ops! Algo deu errado.</h3>
                         <p style="color: #666;">Não conseguimos carregar o checklist. Verifique sua internet.</p>
-                        <button onclick="location.reload()" style="margin-top: 15px; padding: 10px 20px; background: #FF3B30; color: white; border: none; border-radius: 8px; cursor: pointer;">Tentar Novamente</button>
+                        <button onclick="location.reload()" style="margin-top: 15px; padding: 10px 20px; background: #fc9003; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold;">Tentar Novamente</button>
                     </div>
                 `;
             }

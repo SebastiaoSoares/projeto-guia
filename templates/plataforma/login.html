@@ -20,9 +20,9 @@
             font-weight: 500;
         }
         .alert-danger {
-            background: #FFF0F0;
-            color: #FF3B30;
-            border: 1px solid #FFD6D6;
+            background: rgba(252, 144, 3, 0.1); /* Fundo Laranja Suave */
+            color: #fc9003; /* Laranja da marca */
+            border: 1px solid rgba(252, 144, 3, 0.3); /* Borda Laranja translúcida */
         }
     </style>
 </head>
@@ -31,8 +31,7 @@
         <div class="container">
             <div class="header-content">
                 <div class="logo">
-                    <i class="fas fa-rocket rocket-icon"></i>
-                    <span class="logo-text">GUIA</span>
+                    <img src="{{ url_for('static', filename='images/image.png') }}" alt="Logo do GUIA" class="logo-image" height="60">
                 </div>
             </div>
         </div>
@@ -45,7 +44,7 @@
                 <center><p>Faça login para acessar sua conta</p></center>
             </div>
             
-            <!-- Motor de mensagens nativo do Flask (Captura erros do backend e exibe em vermelho) -->
+            <!-- Motor de mensagens nativo do Flask (Captura erros do backend e exibe em laranja) -->
             {% with messages = get_flashed_messages(with_categories=true) %}
               {% if messages %}
                 {% for category, message in messages %}

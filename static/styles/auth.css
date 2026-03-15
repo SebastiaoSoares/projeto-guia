@@ -6,7 +6,8 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background: linear-gradient(135deg, #FFE5E3 0%, #FFF0E6 100%);
+    /* Fundo suave com gradiente do Off-White para o Creme da marca */
+    background: linear-gradient(135deg, var(--bg-main) 0%, var(--secondary) 100%);
     padding: 100px 20px 40px;
 }
 
@@ -22,7 +23,7 @@
 .auth-box h1 {
     text-align: center;
     margin-bottom: 30px;
-    color: var(--dark);
+    color: var(--dark); /* Azul Escuro puxado do main.css */
     font-size: 2rem;
 }
 
@@ -53,11 +54,14 @@
     transition: 0.2s;
     width: 100%; /* Input ocupa toda largura */
     box-sizing: border-box; /* Importantíssimo! */
+    background-color: var(--bg-main); /* Fundo levemente off-white nos inputs */
 }
 
 .form-group input:focus {
     outline: none;
-    border-color: var(--primary-red);
+    border-color: var(--primary); /* Borda Laranja no foco */
+    background-color: white;
+    box-shadow: 0 0 0 3px rgba(252, 144, 3, 0.1); /* Sombra Laranja suave */
 }
 
 /* Linha com dois campos (nome e sobrenome) */
@@ -79,7 +83,7 @@
 }
 
 .forgot-link {
-    color: var(--primary-red);
+    color: var(--primary); /* Laranja da marca */
     text-decoration: none;
     font-size: 0.9rem;
 }
@@ -89,7 +93,7 @@
 }
 
 .btn-auth {
-    background-color: var(--primary-red);
+    background-color: var(--primary); /* Laranja da marca */
     color: white;
     border: none;
     padding: 14px;
@@ -104,7 +108,7 @@
 }
 
 .btn-auth:hover {
-    background-color: #E5352B;
+    background-color: var(--primary-hover);
     transform: translateY(-2px);
     box-shadow: var(--shadow-md);
 }
@@ -117,7 +121,7 @@
 }
 
 .auth-footer a {
-    color: var(--primary-red);
+    color: var(--primary); /* Laranja da marca */
     text-decoration: none;
     font-weight: 600;
 }
@@ -136,6 +140,7 @@
 .terms input {
     width: auto !important; /* Checkbox não precisa ser largo */
     flex: 0 0 auto;
+    accent-color: var(--primary); /* Checkbox na cor Laranja */
 }
 
 .terms label {

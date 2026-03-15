@@ -12,7 +12,8 @@
 .onboarding-header h1 {
     font-size: 2.8rem;
     margin-bottom: 15px;
-    background: linear-gradient(135deg, #FF3B30, #FF9500);
+    /* Gradiente ajustado com Laranja e um tom mais suave */
+    background: linear-gradient(135deg, #fc9003, #e68200);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -22,7 +23,8 @@
     background: #FFF;
     border-radius: 12px;
     padding: 25px;
-    box-shadow: 0 4px 20px rgba(255, 59, 48, 0.1);
+    /* Sombra usando o Azul Escuro da marca */
+    box-shadow: 0 4px 20px rgba(46, 67, 101, 0.1);
     margin-bottom: 40px;
 }
 
@@ -36,7 +38,8 @@
 
 .progress-fill {
     height: 100%;
-    background: linear-gradient(90deg, #FF3B30, #FF9500);
+    /* Gradiente da barra de progresso no Laranja da marca */
+    background: linear-gradient(90deg, #fc9003, #e68200);
     border-radius: 4px;
     width: 25%;
     transition: width 0.5s ease;
@@ -55,7 +58,7 @@
 
 .progress-percentage {
     font-weight: 700;
-    color: #FF3B30;
+    color: #fc9003; /* Laranja da marca */
     font-size: 1.2rem;
 }
 
@@ -71,23 +74,26 @@
     border-radius: 12px;
     padding: 30px;
     box-shadow: 0 2px 15px rgba(0,0,0,0.05);
-    border-left: 5px solid #FF3B30;
+    /* Borda lateral padrão ajustada para o Laranja */
+    border-left: 5px solid #fc9003;
     transition: all 0.3s ease;
 }
 
 .step-card:hover {
     transform: translateY(-5px);
-    box-shadow: 0 8px 25px rgba(255, 59, 48, 0.15);
+    box-shadow: 0 8px 25px rgba(252, 144, 3, 0.15); /* Sombra Laranja suave */
 }
 
 .step-card.completed {
-    border-left-color: #34C759;
+    /* Passo concluído usando o Azul Escuro da marca (no lugar do verde antigo) */
+    border-left-color: #2e4365;
     opacity: 0.8;
 }
 
 .step-card.current {
-    border-left-color: #FF9500;
-    box-shadow: 0 4px 20px rgba(255, 149, 0, 0.2);
+    /* Passo atual em destaque com Creme/Laranja */
+    border-left-color: #fc9003;
+    box-shadow: 0 4px 20px rgba(252, 144, 3, 0.2);
 }
 
 .step-header {
@@ -107,7 +113,7 @@
     width: 40px;
     height: 40px;
     border-radius: 50%;
-    background: #FF3B30;
+    background: #fc9003; /* Laranja da marca */
     color: #FFF;
     display: flex;
     align-items: center;
@@ -117,11 +123,11 @@
 }
 
 .step-card.completed .step-number {
-    background: #34C759;
+    background: #2e4365; /* Azul Escuro */
 }
 
 .step-card.current .step-number {
-    background: #FF9500;
+    background: #fc9003; /* Laranja da marca */
 }
 
 .step-content h3 {
@@ -172,8 +178,9 @@
 }
 
 .task-checkbox.checked {
-    background: #34C759;
-    border-color: #34C759;
+    /* Checkbox marcado em Azul Escuro */
+    background: #2e4365;
+    border-color: #2e4365;
     color: #FFF;
 }
 
@@ -200,13 +207,15 @@
 }
 
 .task-status.completed {
-    background: #D4EDDA;
-    color: #155724;
+    /* Status concluído: fundo azul claro, texto azul escuro */
+    background: rgba(46, 67, 101, 0.1);
+    color: #2e4365;
 }
 
 .task-status.pending {
-    background: #FFF3CD;
-    color: #856404;
+    /* Status pendente: fundo creme, texto laranja */
+    background: rgba(251, 222, 149, 0.5); /* Creme suave */
+    color: #e68200; /* Laranja escurecido para legibilidade */
 }
 
 .step-actions {
@@ -219,7 +228,7 @@
 }
 
 .btn-complete {
-    background: #34C759;
+    background: #2e4365; /* Azul Escuro */
     color: #FFF;
     border: none;
     padding: 12px 24px;
@@ -230,14 +239,14 @@
 }
 
 .btn-complete:hover {
-    background: #28A745;
+    background: #1f2d45;
     transform: translateY(-2px);
 }
 
 .btn-skip {
     background: transparent;
-    color: #FF3B30;
-    border: 1px solid #FF3B30;
+    color: #fc9003; /* Laranja da marca */
+    border: 1px solid #fc9003;
     padding: 12px 24px;
     border-radius: 8px;
     font-weight: 600;
@@ -246,7 +255,7 @@
 }
 
 .btn-skip:hover {
-    background: rgba(255, 59, 48, 0.1);
+    background: rgba(252, 144, 3, 0.1);
 }
 
 .resources-section {
@@ -273,13 +282,13 @@
 }
 
 .resource-card:hover {
-    border-color: #FF3B30;
+    border-color: #fc9003; /* Laranja da marca */
     transform: translateY(-3px);
 }
 
 .resource-icon {
     font-size: 2rem;
-    color: #FF3B30;
+    color: #fc9003; /* Laranja da marca */
     margin-bottom: 15px;
 }
 
@@ -292,7 +301,7 @@
     display: inline-flex;
     align-items: center;
     gap: 10px;
-    background: #FF3B30;
+    background: #fc9003; /* Laranja da marca */
     color: #FFF;
     text-decoration: none;
     padding: 15px 30px;
@@ -302,9 +311,9 @@
 }
 
 .btn-dashboard:hover {
-    background: #E5352B;
+    background: #e68200;
     transform: translateY(-2px);
-    box-shadow: 0 8px 25px rgba(255, 59, 48, 0.3);
+    box-shadow: 0 8px 25px rgba(252, 144, 3, 0.3);
 }
 
 @media (max-width: 768px) {
